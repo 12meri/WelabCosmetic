@@ -1,0 +1,51 @@
+services:
+  fw2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      no_cache: true
+      args:
+        USERNAME: meriem # À Modifier
+        UID: 1000        # À Modifier
+        EMAIL: meriem.ould-taleb@univ-orleans.fr # À Modifier
+        NAME: "meriem ould taleb"        # À Modifier
+    container_name: LaboWelab 
+    command: /bin/bash
+    tty: true
+    stdin_open: true
+    volumes:
+    - ./workspace:/var/www/html
+    ports:
+    - "8011:8000"
+    - "8021:4200"
+    environment:
+      PHP_IDE_CONFIG: serverName=contacts
+      PS1: "[ $$(whoami) | $$(pwd) ] "
+      DATABASE_URL: "postgresql://labo_user:labo_password1234@database:5432/labo_stock?serverVersion=15&charset=utf8"
+    depends_on:
+      - database
+    networks:
+      - welab_network # pour mettre les deux containers sur un seul reseau
+
+ # Ajoute ce NOUVEAU service pour PostgreSQL
+  database:
+    image: postgres:15-alpine
+    container_name: welab-database
+    environment:
+      POSTGRES_DB: labo_stock
+      POSTGRES_USER: labo_user
+      POSTGRES_PASSWORD: labo_password1234
+    ports:
+      - "5434:5432"  # 5434 sur ta machine, 5432 dans Docker
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - welab_network # Utilise le réseau
+
+# Ajoute ce volume pour persister les données
+volumes:
+  postgres_data:
+
+networks:
+  welab_network: ## definir le reseau personel
+    driver: bridge
