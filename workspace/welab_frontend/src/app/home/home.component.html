@@ -1,0 +1,11 @@
+<h1>Accueil</h1>
+
+<div *ngIf="homeData">
+  <h2>{{ homeData.message }}</h2>
+  <p>Date: {{ homeData.date }}</p>
+  
+</div>
+
+<div *ngIf="!homeData">
+  Chargement.....?
+</div>

@@ -30,7 +30,7 @@ symfony new weLab_backend --api
 
 # faut ajouter la bibliotheque bundle
 pour les migrations
-cd bonnes_lectures_backend--api
+cd welab_backend
 symfony composer require symfony/maker-bundle --dev
 
 au cas de souci 
@@ -91,10 +91,9 @@ Enable SSR/SSG : Non (N)
 
 # 3.pour lancer le server 
 cd welab_frontend
-ng serve --host 0.0.0.0 & // ou ng serve
-ouvrir un autre terminal et lancer ca 
-
- ng serve --host 0.0.0.0 --port 4200 et le laissser ouvert
+  ng serve --host 0.0.0.0 &
+ou ouvrir un autre terminal et lancer ca 
+  ng serve --host 0.0.0.0 et le laissser ouvert
 
 puis on a acces sur localhost:8021
 
@@ -116,3 +115,40 @@ export const appConfig: ApplicationConfig = {
 ---
 
 # creation de home page
+- backend
+symfony console make:controller HomeController 
+
+ modifie pour quil envoie des donnee en json 
+
+--
+- frontend
+
+ng generate component home.component
+relier les routes dans app.routes.ts
+ajouter le componenet dans app.html <app-home></app-home>
+
+--
+backend
+
+# entite Matiere Premiere
+symfony console make:entity MatPremiere
+
+nom_MP string 120 no
+INCI string 200 yes
+NOI string 60 yes
+categorie string 80 yes
+fonction string 255 yes 
+cosmos string 10 yes 
+
+verifie quil ya [ApiResource]
+
+- les fictures : MatPremiere.fixtures.php
+symfony console make:fixtures
+
+symfony console make:migration
+php bin/console doctrine:migrations:migrate
+
+Charge les données de test
+php bin/console doctrine:fixtures:load
+
+# entite fournisseur
