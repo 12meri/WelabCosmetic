@@ -47,8 +47,8 @@ class Lot
     #[ORM\JoinColumn(nullable:false)]
     private ?MatPremiere $mp = null;
 
-    // #[ORM\ManyToOne(inversedBy: 'lots')]
-    // private ?DemandeEchantillon $demandeEchantillon = null;
+    #[ORM\ManyToOne(inversedBy: 'lots')]
+    private ?DemandeEchantillon $demandeEchantillon = null;
 
 
 
@@ -164,7 +164,7 @@ class Lot
         return $this;
     }
 
-    /*
+    
     public function getDemandeEchantillon(): ?DemandeEchantillon
     {
         return $this->demandeEchantillon;
@@ -175,5 +175,5 @@ class Lot
         $this->demandeEchantillon = $demandeEchantillon;
         return $this;
     }
-    */
+    
 }

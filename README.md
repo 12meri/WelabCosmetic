@@ -225,3 +225,18 @@ mp Manytoone MatPremiere no
 
 les fixtures 
 php bin/console make:fixtures // sans demandeecahntillon pour le moment
+
+# entite deamnde echantillon
+php bin/console make:entity DemandeEchantillon
+
+dateDemande date no 
+etat string 30 no default value [ none] : 'en_cours'
+delaiLivraison date yes 
+fournisseur Manytoone Fournisseur no
+mp Manytoone no
+// pas encore
+utilisateur Manytoone Utilisateur no 
+alerte ManyToone Alerte yes
+
+fixtures // sans alerte et user pour le moment 
+// remettre la relation lot -- demandeEchantillon

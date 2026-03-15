@@ -6,6 +6,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use App\DataFixtures\MatpremieresFixtures;
+use App\DataFixtures\DemandeEchantillonFixtures;
 use App\Entity\Lot;
 use App\Entity\MatPremiere;
 use App\Entity\DemandeEchantillon;
@@ -28,7 +29,7 @@ class LotFixtures extends Fixture implements DependentFixtureInterface
                 'qtRestante' => 18.5,
                 'qtMin' => 5.0,
                 'etat' => 'OK',
-               // 'demande_ref' => null
+                'demande_ref' => null
             ],
             [
                 'mp_ref' => 'mp_0',
@@ -39,7 +40,7 @@ class LotFixtures extends Fixture implements DependentFixtureInterface
                 'qtRestante' => 30.0,
                 'qtMin' => 5.0,
                 'etat' => 'OK',
-                //'demande_ref' => null
+                'demande_ref' => null
             ],
             [
                 'mp_ref' => 'mp_1',           // Beurre de Karité
@@ -50,7 +51,7 @@ class LotFixtures extends Fixture implements DependentFixtureInterface
                 'qtRestante' => 12.0,
                 'qtMin' => 10.0,
                 'etat' => 'ALERTE',             // Stock bas !
-               // 'demande_ref' => null
+                'demande_ref' => null
             ],
             [
                 'mp_ref' => 'mp_7',           // Acide Hyaluronique
@@ -61,7 +62,7 @@ class LotFixtures extends Fixture implements DependentFixtureInterface
                 'qtRestante' => 0.0,
                 'qtMin' => 1.0,
                 'etat' => 'EPUISE',             // Épuisé
-               // 'demande_ref' => null
+                'demande_ref' => 'demande_0'
             ],
              [
                 'mp_ref' => 'mp_4',           // Acid citric anhydrous
@@ -72,7 +73,7 @@ class LotFixtures extends Fixture implements DependentFixtureInterface
                 'qtRestante' => 15.0,
                 'qtMin' => 5.0,
                 'etat' => 'ALERTE',             // DDM proche !
-                //'demande_ref' => null
+                'demande_ref' => 'demande_3'
             ],
              [
                 'mp_ref' => 'mp_3',           // Acétate DL-Alpha-Tocophérol
@@ -83,7 +84,7 @@ class LotFixtures extends Fixture implements DependentFixtureInterface
                 'qtRestante' => 2.0,
                 'qtMin' => 0.5,
                 'etat' => 'OK',
-               // 'demande_ref' => 'demande_0'    // Référence vers une demande
+                'demande_ref' => null    // Référence vers une demande
             ],
     ];
 
@@ -103,10 +104,10 @@ class LotFixtures extends Fixture implements DependentFixtureInterface
         $lot->setDateMaj($data['dateArrivee']);
 
         #pour demandechantillon
-        // if (isset($data['demande_ref']) && $data['demande_ref']) {
-        //         $demande = $this->getReference($data['demande_ref']);
-        //         $lot->setDemandeEchantillon($demande);
-        //     }
+        if (isset($data['demande_ref']) && $data['demande_ref']) {
+                $demande = $this->getReference($data['demande_ref'], DemandeEchantillon::class);
+                $lot->setDemandeEchantillon($demande);
+            }
 
         $manager->persist($lot);
 
@@ -119,7 +120,7 @@ class LotFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             MatpremieresFixtures::class,
-            // DemandeEchantillonFixtures::class, // À décommenter plus tard
+            //DemandeEchantillonFixtures::class,
         ];
     }
 }

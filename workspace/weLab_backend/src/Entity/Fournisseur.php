@@ -47,11 +47,18 @@ class Fournisseur
     #[ORM\OneToMany(targetEntity: Fournir::class, mappedBy: 'fournisseur')]
     private Collection $fournirs;
 
+    /**
+     * @var Collection<int, DemandeEchantillon>
+     */
+    #[ORM\OneToMany(targetEntity: DemandeEchantillon::class, mappedBy: 'fournisseur')]
+    private Collection $demandeEchantillons;
+
     public function __construct()
     {
         $this->distributions = new ArrayCollection();
         $this->contactFournisseurs = new ArrayCollection();
         $this->fournirs = new ArrayCollection();
+        $this->demandeEchantillons = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -191,6 +198,36 @@ class Fournisseur
             // set the owning side to null (unless already changed)
             if ($fournir->getFournisseur() === $this) {
                 $fournir->setFournisseur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DemandeEchantillon>
+     */
+    public function getDemandeEchantillons(): Collection
+    {
+        return $this->demandeEchantillons;
+    }
+
+    public function addDemandeEchantillon(DemandeEchantillon $demandeEchantillon): static
+    {
+        if (!$this->demandeEchantillons->contains($demandeEchantillon)) {
+            $this->demandeEchantillons->add($demandeEchantillon);
+            $demandeEchantillon->setFournisseur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDemandeEchantillon(DemandeEchantillon $demandeEchantillon): static
+    {
+        if ($this->demandeEchantillons->removeElement($demandeEchantillon)) {
+            // set the owning side to null (unless already changed)
+            if ($demandeEchantillon->getFournisseur() === $this) {
+                $demandeEchantillon->setFournisseur(null);
             }
         }
 

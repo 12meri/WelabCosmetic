@@ -53,6 +53,12 @@ class MatPremiere
     #[ORM\OneToMany(targetEntity: Lot::class, mappedBy: 'mp')]
     private Collection $lots;
 
+    /**
+     * @var Collection<int, DemandeEchantillon>
+     */
+    #[ORM\OneToMany(targetEntity: DemandeEchantillon::class, mappedBy: 'mp')]
+    private Collection $demandeEchantillons;
+
 
 
 
@@ -61,6 +67,7 @@ class MatPremiere
         $this->lots = new ArrayCollection();
         $this->fournirs = new ArrayCollection();
         $this->distribues = new ArrayCollection();
+        $this->demandeEchantillons = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -223,6 +230,36 @@ class MatPremiere
                 $lot->setMp(null);
             }
         }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DemandeEchantillon>
+     */
+    public function getDemandeEchantillons(): Collection
+    {
+        return $this->demandeEchantillons;
+    }
+
+    public function addDemandeEchantillon(DemandeEchantillon $demandeEchantillon): static
+    {
+        if (!$this->demandeEchantillons->contains($demandeEchantillon)) {
+            $this->demandeEchantillons->add($demandeEchantillon);
+            $demandeEchantillon->setMp($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDemandeEchantillon(DemandeEchantillon $demandeEchantillon): static
+    {
+        if ($this->demandeEchantillons->removeElement($demandeEchantillon)) {
+            // set the owning side to null (unless already changed)
+            if ($demandeEchantillon->getMp() === $this) {
+                $demandeEchantillon->setMp(null);
+            }
+        }
+
         return $this;
     }
 
