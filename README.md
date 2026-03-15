@@ -159,5 +159,14 @@ adresse string 200 yes
 emailGen tring 200 yes
 telFourni string 30 yes
 
+verifie quil ya [ApiResource]
 les fixtures
+php bin/console make:fixtures
+
+# entite distribution
+php bin/console make:entity Distribution
+
+nomMarque string 200 no
+fournisseur ManyToOne Fournisseur no  distributions  no(orphanremoval)
+
 php bin/console make:fixtures

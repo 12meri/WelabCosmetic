@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\FournisseurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FournisseurRepository::class)]
@@ -26,6 +28,17 @@ class Fournisseur
 
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $telFourni = null;
+
+    /**
+     * @var Collection<int, Distribution>
+     */
+    #[ORM\OneToMany(targetEntity: Distribution::class, mappedBy: 'fournisseur')]
+    private Collection $distributions;
+
+    public function __construct()
+    {
+        $this->distributions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -76,6 +89,36 @@ class Fournisseur
     public function setTelFourni(?string $tel_fourni): static
     {
         $this->telFourni = $tel_fourni;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Distribution>
+     */
+    public function getDistributions(): Collection
+    {
+        return $this->distributions;
+    }
+
+    public function addDistribution(Distribution $distribution): static
+    {
+        if (!$this->distributions->contains($distribution)) {
+            $this->distributions->add($distribution);
+            $distribution->setFournisseur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDistribution(Distribution $distribution): static
+    {
+        if ($this->distributions->removeElement($distribution)) {
+            // set the owning side to null (unless already changed)
+            if ($distribution->getFournisseur() === $this) {
+                $distribution->setFournisseur(null);
+            }
+        }
 
         return $this;
     }
