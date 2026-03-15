@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\MatPremiereRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MatPremiereRepository::class)]
@@ -32,6 +34,17 @@ class MatPremiere
 
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $cosmos = null;
+
+    /**
+     * @var Collection<int, Fournir>
+     */
+    #[ORM\OneToMany(targetEntity: Fournir::class, mappedBy: 'MatPrem')]
+    private Collection $fournirs;
+
+    public function __construct()
+    {
+        $this->fournirs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -106,6 +119,36 @@ class MatPremiere
     public function setCosmos(?string $cosmos): static
     {
         $this->cosmos = $cosmos;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Fournir>
+     */
+    public function getFournirs(): Collection
+    {
+        return $this->fournirs;
+    }
+
+    public function addFournir(Fournir $fournir): static
+    {
+        if (!$this->fournirs->contains($fournir)) {
+            $this->fournirs->add($fournir);
+            $fournir->setMatPrem($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFournir(Fournir $fournir): static
+    {
+        if ($this->fournirs->removeElement($fournir)) {
+            // set the owning side to null (unless already changed)
+            if ($fournir->getMatPrem() === $this) {
+                $fournir->setMatPrem(null);
+            }
+        }
 
         return $this;
     }

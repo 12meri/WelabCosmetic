@@ -185,3 +185,16 @@ les fixtures
 utiliser  implements DependentFixtureInterface pour utiliser les methode addReferences et getReference et getDependencies
 pour pouvoir faire lordre entre loading des fixtures
 
+# entite Fournir
+php bin/console make:entity Fournir
+
+MatPrem ManyToOne MatPremiere no 
+fournissuer  ManyToOne Fournisseur no 
+distribution  ManyToOne Distribution yes 
+prix decimal precision:10 scale:2 nullable: yes
+moq  decimal precision:10 scale:2 nullable: yes
+
+les fixtures
+php bin/console make:fixtures
+FournirFixtures
+une matiere premiere lier a un fournisseur directement , ou sous une marque specifique de ce fournisseur ce qui donne deux chois de prix 

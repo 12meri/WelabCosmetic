@@ -41,10 +41,17 @@ class Fournisseur
     #[ORM\OneToMany(targetEntity: ContactFournisseur::class, mappedBy: 'fournisseur')]
     private Collection $contactFournisseurs;
 
+    /**
+     * @var Collection<int, Fournir>
+     */
+    #[ORM\OneToMany(targetEntity: Fournir::class, mappedBy: 'fournisseur')]
+    private Collection $fournirs;
+
     public function __construct()
     {
         $this->distributions = new ArrayCollection();
         $this->contactFournisseurs = new ArrayCollection();
+        $this->fournirs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -154,6 +161,36 @@ class Fournisseur
             // set the owning side to null (unless already changed)
             if ($contactFournisseur->getFournisseur() === $this) {
                 $contactFournisseur->setFournisseur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Fournir>
+     */
+    public function getFournirs(): Collection
+    {
+        return $this->fournirs;
+    }
+
+    public function addFournir(Fournir $fournir): static
+    {
+        if (!$this->fournirs->contains($fournir)) {
+            $this->fournirs->add($fournir);
+            $fournir->setFournisseur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFournir(Fournir $fournir): static
+    {
+        if ($this->fournirs->removeElement($fournir)) {
+            // set the owning side to null (unless already changed)
+            if ($fournir->getFournisseur() === $this) {
+                $fournir->setFournisseur(null);
             }
         }
 

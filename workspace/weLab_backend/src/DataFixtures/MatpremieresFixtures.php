@@ -141,7 +141,7 @@ class MatpremieresFixtures extends Fixture
             // ]
         ];
 
-        foreach ($mpData as $data) {
+        foreach ($mpData as $index => $data) {
             $mp = new MatPremiere();
             $mp->setNomMp($data['nom']);
             $mp->setInci($data['inci']);
@@ -153,6 +153,7 @@ class MatpremieresFixtures extends Fixture
             $mp->setNoi('NOI-' . uniqid());  // À remplacer par de vraies valeurs si disponibles
             
             $manager->persist($mp);
+            $this->addReference('mp_' . $index, $mp);
         }
 
         $manager->flush();

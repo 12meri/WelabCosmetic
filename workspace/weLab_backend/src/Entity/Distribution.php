@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\DistributionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DistributionRepository::class)]
@@ -21,6 +23,17 @@ class Distribution
     #[ORM\ManyToOne(inversedBy: 'distributions')]
     #[ORM\JoinColumn(nullable: false , onDelete: 'CASCADE')]
     private ?Fournisseur $fournisseur = null;
+
+    /**
+     * @var Collection<int, Fournir>
+     */
+    #[ORM\OneToMany(targetEntity: Fournir::class, mappedBy: 'distribution')]
+    private Collection $fournirs;
+
+    public function __construct()
+    {
+        $this->fournirs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -47,6 +60,36 @@ class Distribution
     public function setFournisseur(?Fournisseur $fournisseur): static
     {
         $this->fournisseur = $fournisseur;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Fournir>
+     */
+    public function getFournirs(): Collection
+    {
+        return $this->fournirs;
+    }
+
+    public function addFournir(Fournir $fournir): static
+    {
+        if (!$this->fournirs->contains($fournir)) {
+            $this->fournirs->add($fournir);
+            $fournir->setDistribution($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFournir(Fournir $fournir): static
+    {
+        if ($this->fournirs->removeElement($fournir)) {
+            // set the owning side to null (unless already changed)
+            if ($fournir->getDistribution() === $this) {
+                $fournir->setDistribution(null);
+            }
+        }
 
         return $this;
     }
