@@ -1,0 +1,82 @@
+<?php
+
+namespace App\Entity;
+
+use ApiPlatform\Metadata\ApiResource;
+use App\Repository\FournisseurRepository;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: FournisseurRepository::class)]
+#[ApiResource()]
+class Fournisseur
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column(length: 200)]
+    private ?string $nomEntr = null;
+
+    #[ORM\Column(length: 200, nullable: true)]
+    private ?string $adresse = null;
+
+    #[ORM\Column(length: 200, nullable: true)]
+    private ?string $emailGen = null;
+
+    #[ORM\Column(length: 30, nullable: true)]
+    private ?string $telFourni = null;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getNomEntr(): ?string
+    {
+        return $this->nomEntr;
+    }
+
+    public function setNomEntr(string $nom_entr): static
+    {
+        $this->nomEntr = $nom_entr;
+
+        return $this;
+    }
+
+    public function getAdresse(): ?string
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(?string $adresse): static
+    {
+        $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    public function getEmailGen(): ?string
+    {
+        return $this->emailGen;
+    }
+
+    public function setEmailGen(?string $email_gen): static
+    {
+        $this->emailGen = $email_gen;
+
+        return $this;
+    }
+
+    public function getTelFourni(): ?string
+    {
+        return $this->telFourni;
+    }
+
+    public function setTelFourni(?string $tel_fourni): static
+    {
+        $this->telFourni = $tel_fourni;
+
+        return $this;
+    }
+}

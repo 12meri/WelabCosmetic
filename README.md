@@ -133,7 +133,7 @@ backend
 # entite Matiere Premiere
 symfony console make:entity MatPremiere
 
-nom_MP string 120 no
+nomMP string 120 no
 INCI string 200 yes
 NOI string 60 yes
 categorie string 80 yes
@@ -152,3 +152,12 @@ Charge les données de test
 php bin/console doctrine:fixtures:load
 
 # entite fournisseur
+php bin/console make:entity Fournisseur
+
+nomEntr string 200 no
+adresse string 200 yes
+emailGen tring 200 yes
+telFourni string 30 yes
+
+les fixtures
+php bin/console make:fixtures

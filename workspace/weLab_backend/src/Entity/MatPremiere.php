@@ -16,7 +16,7 @@ class MatPremiere
     private ?int $id = null;
 
     #[ORM\Column(length: 200)]
-    private ?string $nom_MP = null;
+    private ?string $nomMP = null;
 
     #[ORM\Column(length: 200, nullable: true)]
     private ?string $INCI = null;
@@ -40,12 +40,12 @@ class MatPremiere
 
     public function getNomMP(): ?string
     {
-        return $this->nom_MP;
+        return $this->nomMP;
     }
 
     public function setNomMP(string $nom_MP): static
     {
-        $this->nom_MP = $nom_MP;
+        $this->nomMP = $nom_MP;
 
         return $this;
     }
