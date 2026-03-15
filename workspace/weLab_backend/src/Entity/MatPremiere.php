@@ -41,9 +41,16 @@ class MatPremiere
     #[ORM\OneToMany(targetEntity: Fournir::class, mappedBy: 'MatPrem')]
     private Collection $fournirs;
 
+    /**
+     * @var Collection<int, Distribue>
+     */
+    #[ORM\OneToMany(targetEntity: Distribue::class, mappedBy: 'mp')]
+    private Collection $distribues;
+
     public function __construct()
     {
         $this->fournirs = new ArrayCollection();
+        $this->distribues = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -147,6 +154,36 @@ class MatPremiere
             // set the owning side to null (unless already changed)
             if ($fournir->getMatPrem() === $this) {
                 $fournir->setMatPrem(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Distribue>
+     */
+    public function getDistribues(): Collection
+    {
+        return $this->distribues;
+    }
+
+    public function addDistribue(Distribue $distribue): static
+    {
+        if (!$this->distribues->contains($distribue)) {
+            $this->distribues->add($distribue);
+            $distribue->setMp($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDistribue(Distribue $distribue): static
+    {
+        if ($this->distribues->removeElement($distribue)) {
+            // set the owning side to null (unless already changed)
+            if ($distribue->getMp() === $this) {
+                $distribue->setMp(null);
             }
         }
 

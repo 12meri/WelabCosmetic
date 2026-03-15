@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ContactFournisseurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ContactFournisseurRepository::class)]
@@ -33,6 +35,17 @@ class ContactFournisseur
     #[ORM\ManyToOne(inversedBy: 'contactFournisseurs')]
     #[ORM\JoinColumn(nullable: false , onDelete: 'CASCADE')] # si fournisseur disparait contact supprimer 
     private ?Fournisseur $fournisseur = null;
+
+    /**
+     * @var Collection<int, Distribue>
+     */
+    #[ORM\OneToMany(targetEntity: Distribue::class, mappedBy: 'contact')]
+    private Collection $distribues;
+
+    public function __construct()
+    {
+        $this->distribues = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -107,6 +120,36 @@ class ContactFournisseur
     public function setFournisseur(?Fournisseur $fournisseur): static
     {
         $this->fournisseur = $fournisseur;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Distribue>
+     */
+    public function getDistribues(): Collection
+    {
+        return $this->distribues;
+    }
+
+    public function addDistribue(Distribue $distribue): static
+    {
+        if (!$this->distribues->contains($distribue)) {
+            $this->distribues->add($distribue);
+            $distribue->setContact($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDistribue(Distribue $distribue): static
+    {
+        if ($this->distribues->removeElement($distribue)) {
+            // set the owning side to null (unless already changed)
+            if ($distribue->getContact() === $this) {
+                $distribue->setContact(null);
+            }
+        }
 
         return $this;
     }

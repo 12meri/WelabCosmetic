@@ -30,9 +30,16 @@ class Distribution
     #[ORM\OneToMany(targetEntity: Fournir::class, mappedBy: 'distribution')]
     private Collection $fournirs;
 
+    /**
+     * @var Collection<int, Distribue>
+     */
+    #[ORM\OneToMany(targetEntity: Distribue::class, mappedBy: 'distribution')]
+    private Collection $distribues;
+
     public function __construct()
     {
         $this->fournirs = new ArrayCollection();
+        $this->distribues = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -88,6 +95,36 @@ class Distribution
             // set the owning side to null (unless already changed)
             if ($fournir->getDistribution() === $this) {
                 $fournir->setDistribution(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Distribue>
+     */
+    public function getDistribues(): Collection
+    {
+        return $this->distribues;
+    }
+
+    public function addDistribue(Distribue $distribue): static
+    {
+        if (!$this->distribues->contains($distribue)) {
+            $this->distribues->add($distribue);
+            $distribue->setDistribution($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDistribue(Distribue $distribue): static
+    {
+        if ($this->distribues->removeElement($distribue)) {
+            // set the owning side to null (unless already changed)
+            if ($distribue->getDistribution() === $this) {
+                $distribue->setDistribution(null);
             }
         }
 

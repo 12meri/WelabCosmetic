@@ -198,3 +198,13 @@ les fixtures
 php bin/console make:fixtures
 FournirFixtures
 une matiere premiere lier a un fournisseur directement , ou sous une marque specifique de ce fournisseur ce qui donne deux chois de prix 
+
+# entite Distribue
+php bin/console make:entity Distribue
+
+distribution ManyToOne Distribution no 
+mp ManyToOne MatPremiere no
+contact Manytoone ContactFournisseur yes
+
+chaque distribution a ses matieres premieres , et peut etre un contact ou plus qui la gere dans lentreprise
+
