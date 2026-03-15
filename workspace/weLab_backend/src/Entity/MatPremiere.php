@@ -47,8 +47,18 @@ class MatPremiere
     #[ORM\OneToMany(targetEntity: Distribue::class, mappedBy: 'mp')]
     private Collection $distribues;
 
+    /**
+     * @var Collection<int, Lot>
+     */
+    #[ORM\OneToMany(targetEntity: Lot::class, mappedBy: 'mp')]
+    private Collection $lots;
+
+
+
+
     public function __construct()
     {
+        $this->lots = new ArrayCollection();
         $this->fournirs = new ArrayCollection();
         $this->distribues = new ArrayCollection();
     }
@@ -63,9 +73,9 @@ class MatPremiere
         return $this->nomMP;
     }
 
-    public function setNomMP(string $nom_MP): static
+    public function setNomMP(string $nomMP): static
     {
-        $this->nomMP = $nom_MP;
+        $this->nomMP = $nomMP;
 
         return $this;
     }
@@ -189,4 +199,31 @@ class MatPremiere
 
         return $this;
     }
+    /**
+     * @return Collection<int, Lot>
+     */
+    public function getLots(): Collection
+    {
+        return $this->lots;
+    }
+
+    public function addLot(Lot $lot): static
+    {
+        if (!$this->lots->contains($lot)) {
+            $this->lots->add($lot);
+            $lot->setMp($this);
+        }
+        return $this;
+    }
+
+    public function removeLot(Lot $lot): static
+    {
+        if ($this->lots->removeElement($lot)) {
+            if ($lot->getMp() === $this) {
+                $lot->setMp(null);
+            }
+        }
+        return $this;
+    }
+
 }

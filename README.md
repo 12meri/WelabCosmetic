@@ -208,3 +208,20 @@ contact Manytoone ContactFournisseur yes
 
 chaque distribution a ses matieres premieres , et peut etre un contact ou plus qui la gere dans lentreprise
 
+# entite lot
+php bin/console make:entity Lot
+
+numLot string 60 no unique= yes
+dateArrive date yes 
+ddm date yes
+qtInitiale decimal 12 scale= 2 , nullable= no
+qtRestante decimal 12 scale= 2 , nullable= yes
+dMaj daetime yes 
+cosmos string 10 yes
+qtMin decimal 12 , 2 , no
+etat string 30 no , default value[none]:ok 
+demandeEchantillon Manytoone DemandeEchantillon yes  // a declarer apres puisque lentite demande/echantillon nexiste pas encore
+mp Manytoone MatPremiere no 
+
+les fixtures 
+php bin/console make:fixtures // sans demandeecahntillon pour le moment
