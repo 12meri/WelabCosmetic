@@ -170,3 +170,18 @@ nomMarque string 200 no
 fournisseur ManyToOne Fournisseur no  distributions  no(orphanremoval)
 
 php bin/console make:fixtures
+
+# entite contactFournisseur
+php bin/console make:entity ContactFournisseur
+
+nom string 60 no
+prenom string 60 yes
+fonction string 255 yes
+email string 225 yes
+telContact string 30 yes 
+fournisseur ManyToOne Fournisseur null= no ,  yes ,contactFournisseurs , orphaned no
+
+les fixtures 
+utiliser  implements DependentFixtureInterface pour utiliser les methode addReferences et getReference et getDependencies
+pour pouvoir faire lordre entre loading des fixtures
+
