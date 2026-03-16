@@ -240,3 +240,25 @@ alerte ManyToone Alerte yes
 
 fixtures // sans alerte et user pour le moment 
 // remettre la relation lot -- demandeEchantillon
+
+# entite alerte
+symfony console make:entity Alerte
+
+typeAlerte string 40 no
+etatAlerte string 30 no default value [none] 'active'
+dateAlerte datetime no
+message text yes
+lot Manytoone Lot no
+demandeEchantillon Onetoone DemandeEchantillon yes 
+
+//  entité,  définir des constantes
+const TYPE_STOCK_BAS = 'STOCK_BAS';
+const TYPE_DDM_PROCHE = 'DDM_PROCHE';
+const TYPE_PERIME = 'PERIME';
+
+const ETAT_ACTIVE = 'ACTIVE';
+const ETAT_TRAITEE = 'TRAITEE';
+const ETAT_IGNOREE = 'IGNOREE';
+
+// ajouter alerte a demande echantillon
+les demande echantillon dans les fixture de lot sont null par souci dodre denregistrement lots -- alertes -- demandeEchantillon -- lots sinon ca fera une boucle indecise

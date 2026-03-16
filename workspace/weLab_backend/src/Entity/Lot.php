@@ -6,6 +6,8 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\LotRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: LotRepository::class)]
 #[ORM\UniqueConstraint(name:'unique_num_lot',columns:['num_lot'])] # numero de lot unique
@@ -50,7 +52,8 @@ class Lot
     #[ORM\ManyToOne(inversedBy: 'lots')]
     private ?DemandeEchantillon $demandeEchantillon = null;
 
-
+    #[ORM\OneToMany(targetEntity: Alerte::class, mappedBy: 'lot')]
+    private Collection $alertes;
 
     public function getId(): ?int
     {
@@ -175,5 +178,35 @@ class Lot
         $this->demandeEchantillon = $demandeEchantillon;
         return $this;
     }
-    
+
+    // alerte
+        public function __construct()
+    {
+        $this->alertes = new ArrayCollection();
+    }
+
+    public function getAlertes(): Collection
+    {
+        return $this->alertes;
+    }
+
+    public function addAlerte(Alerte $alerte): static
+    {
+        if (!$this->alertes->contains($alerte)) {
+            $this->alertes->add($alerte);
+            $alerte->setLot($this);
+        }
+        return $this;
+    }
+
+    public function removeAlerte(Alerte $alerte): static
+    {
+        if ($this->alertes->removeElement($alerte)) {
+            if ($alerte->getLot() === $this) {
+                $alerte->setLot(null);
+            }
+        }
+        return $this;
+    }
+        
 }

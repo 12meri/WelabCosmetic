@@ -62,7 +62,7 @@ class LotFixtures extends Fixture implements DependentFixtureInterface
                 'qtRestante' => 0.0,
                 'qtMin' => 1.0,
                 'etat' => 'EPUISE',             // Épuisé
-                'demande_ref' => 'demande_0'
+                'demande_ref' => null
             ],
              [
                 'mp_ref' => 'mp_4',           // Acid citric anhydrous
@@ -73,7 +73,7 @@ class LotFixtures extends Fixture implements DependentFixtureInterface
                 'qtRestante' => 15.0,
                 'qtMin' => 5.0,
                 'etat' => 'ALERTE',             // DDM proche !
-                'demande_ref' => 'demande_3'
+                'demande_ref' => null
             ],
              [
                 'mp_ref' => 'mp_3',           // Acétate DL-Alpha-Tocophérol

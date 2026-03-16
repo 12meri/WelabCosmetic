@@ -8,6 +8,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use App\Entity\DemandeEchantillon;
 use App\Entity\Fournisseur;
 use App\Entity\Lot;
+use App\Entity\Alerte;
 use App\Entity\MatPremiere;
 // use App\Entity\Alerte; // À décommenter plus tard
 // use App\Entity\Utilisateur; // À décommenter plus tard
@@ -20,12 +21,7 @@ class DemandeEchantillonFixtures extends Fixture  implements DependentFixtureInt
         // $product = new Product();
         // $manager->persist($product);
 
-        // Dans ton entité, tu peux définir des constantes :
-        // const ETAT_EN_COURS = 'EN_COURS';
-        // const ETAT_ENVOYE = 'ENVOYE';
-        // const ETAT_RECU = 'RECU';
-        // const ETAT_REFUSE = 'REFUSE';
-        // const ETAT_ANNULE = 'ANNULE';
+        
         $demandes = [
             
             [
@@ -34,7 +30,7 @@ class DemandeEchantillonFixtures extends Fixture  implements DependentFixtureInt
                 'dateDemande' => new DateTime('2025-02-15'),
                 'delaiLivraison' => new DateTime('2025-03-15'),
                 'etat' => 'EN_COURS',
-                //'lot_ref' => null                      // Pas encore reçu
+                                   
             ],
             [
                 'fournisseur_ref' => 'fournisseur_0', // CRODA
@@ -42,7 +38,7 @@ class DemandeEchantillonFixtures extends Fixture  implements DependentFixtureInt
                 'dateDemande' => new DateTime('2025-02-20'),
                 'delaiLivraison' => new DateTime('2025-03-20'),
                 'etat' => 'EN_COURS',
-                //'lot_ref' => null
+               
             ],
             
             // ========== Demandes envoyées ==========
@@ -52,7 +48,7 @@ class DemandeEchantillonFixtures extends Fixture  implements DependentFixtureInt
                 'dateDemande' => new DateTime('2025-01-10'),
                 'delaiLivraison' => new DateTime('2025-02-10'),
                 'etat' => 'ENVOYE',
-                //'lot_ref' => null
+               
             ],
             
             // ========== Demandes reçues (avec lot lié) ==========
@@ -62,7 +58,7 @@ class DemandeEchantillonFixtures extends Fixture  implements DependentFixtureInt
                 'dateDemande' => new DateTime('2024-11-05'),
                 'delaiLivraison' => new DateTime('2024-12-05'),
                 'etat' => 'RECU',
-                //'lot_ref' => null                   // Lot correspondant
+                              
             ],
             [
                 'fournisseur_ref' => 'fournisseur_4', // Gattefossé
@@ -70,7 +66,8 @@ class DemandeEchantillonFixtures extends Fixture  implements DependentFixtureInt
                 'dateDemande' => new DateTime('2024-10-15'),
                 'delaiLivraison' => new DateTime('2024-11-15'),
                 'etat' => 'RECU',
-                //'lot_ref' => null                   // Lot correspondant
+                'alerte_ref' => null,
+                                   
             ],
             
             // Demandes refusées 
@@ -80,7 +77,8 @@ class DemandeEchantillonFixtures extends Fixture  implements DependentFixtureInt
                 'dateDemande' => new DateTime('2024-12-01'),
                 'delaiLivraison' => null,              // Pas de délai donné
                 'etat' => 'REFUSE',
-                //'lot_ref' => null
+                'alerte_ref' => 'alerte_2',
+              
             ],
             
             //  Demandes sans alerte (prospection) 
@@ -90,11 +88,11 @@ class DemandeEchantillonFixtures extends Fixture  implements DependentFixtureInt
                 'dateDemande' => new DateTime('2025-03-01'),
                 'delaiLivraison' => new DateTime('2025-04-01'),
                 'etat' => 'EN_COURS',
-                //'lot_ref' => null
+                'alerte_ref' => 'alerte_1',
+               
             ],
             
-            // ========== Demandes avec alerte (à décommenter quand Alerte existe) ==========
-            /*
+            
             [
                 'fournisseur_ref' => 'fournisseur_0',
                 'mp_ref' => 'mp_0',
@@ -102,9 +100,9 @@ class DemandeEchantillonFixtures extends Fixture  implements DependentFixtureInt
                 'delaiLivraison' => new DateTime('2025-03-01'),
                 'etat' => 'EN_COURS',
                 'alerte_ref' => 'alerte_0',
-                'lot_ref' => null
+               
             ],
-            */
+            
         ];
 
         foreach ($demandes as $index => $data) {
@@ -129,15 +127,15 @@ class DemandeEchantillonFixtures extends Fixture  implements DependentFixtureInt
             $mp = $this->getReference($data['mp_ref'], MatPremiere::class);
             $demande->setMp($mp);
             
-            // Alerte (optionnelle - à décommenter plus tard)
-            /*
+            // Alerte 
+            
             if (isset($data['alerte_ref'])) {
                 $alerte = $this->getReference($data['alerte_ref'], Alerte::class);
                 $demande->setAlerte($alerte);
             }
-            */
             
-            // Lien avec un lot (optionnel)
+            
+            // Lien avec un lot
             if (isset($data['lot_ref']) && $data['lot_ref']) {
                 $lot = $this->getReference($data['lot_ref'], Lot::class);
                 $demande->addLot($lot);  // Le lot sera lié à cette demande
@@ -157,8 +155,7 @@ class DemandeEchantillonFixtures extends Fixture  implements DependentFixtureInt
         return [
             FournisseurFixtures::class,
             MatpremieresFixtures::class,
-            //LotFixtures::class, // Pour lier les lots reçus
-            // AlerteFixtures::class, // Quand Alerte existera
+            AlerteFixtures::class, // Quand Alerte existera
         ];
     }
 }

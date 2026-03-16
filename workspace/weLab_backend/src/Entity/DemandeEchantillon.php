@@ -13,6 +13,13 @@ use Doctrine\Common\Collections\Collection;
 #[ApiResource()]
 class DemandeEchantillon
 {
+
+//  définir des constantes :
+        // const ETAT_EN_COURS = 'EN_COURS';
+        // const ETAT_ENVOYE = 'ENVOYE';
+        // const ETAT_RECU = 'RECU';
+        // const ETAT_REFUSE = 'REFUSE';
+        // const ETAT_ANNULE = 'ANNULE';
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -35,8 +42,8 @@ class DemandeEchantillon
     #[ORM\JoinColumn(nullable: false)]
     private ?MatPremiere $mp = null;
 
-    // #[ORM\ManyToOne(inversedBy: 'demandes')]
-    // private ?Alerte $alerte = null;
+    #[ORM\ManyToOne(inversedBy: 'demandes')]
+    private ?Alerte $alerte = null;
 
     
     // #[ORM\ManyToOne(inversedBy: 'demandes')]
@@ -50,7 +57,7 @@ class DemandeEchantillon
     public function __construct()
     {
         $this->dateDemande = new \DateTime();
-        $this->lots = new ArrayCollection();
+        //$this->lots = new ArrayCollection();
     }
 
 
@@ -118,17 +125,24 @@ class DemandeEchantillon
 
         return $this;
     }
-//   public function getAlerte(): ?Alerte
-//     {
-//         return $this->alerte;
-//     }
+  public function getAlerte(): ?Alerte
+    {
+        return $this->alerte;
+    }
 
-//     public function setAlerte(?Alerte $alerte): static
-//     {
-//         $this->alerte = $alerte;
-
-//         return $this;
-//     }
+    public function setAlerte(?Alerte $alerte): static
+    {
+        if ($this->alerte !== null) {
+            $this->alerte->removeDemande($this);
+        }
+        
+        if ($alerte !== null) {
+            $alerte->addDemande($this);
+        }
+        
+        $this->alerte = $alerte;
+        return $this;
+    }
     // public function getUtilisateur(): ?Utilisateur
     // {
     //     return $this->utilisateur;
@@ -141,6 +155,8 @@ class DemandeEchantillon
     //     return $this;
     // }
 
+
+    // relation lot demande , les lots creer par la demande 
     /**
      * @return Collection<int, Lot>
      */
