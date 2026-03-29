@@ -5,29 +5,39 @@ services:
       dockerfile: Dockerfile
       no_cache: true
       args:
-        USERNAME: meriem # À Modifier
-        UID: 1000        # À Modifier
-        EMAIL: meriem.ould-taleb@univ-orleans.fr # À Modifier
-        NAME: "meriem ould taleb"        # À Modifier
-    container_name: LaboWelab 
-    command: /bin/bash
+        USERNAME: meriem
+        UID: 1000
+        EMAIL: meriem.ould-taleb@univ-orleans.fr
+        NAME: "meriem ould taleb"
+
+    container_name: LaboWelab
+
+    # 👉 Lancement automatique du serveur Symfony dans Docker
+    command: php -S 0.0.0.0:8000 -t public
+
     tty: true
     stdin_open: true
+
+    # 👉 On monte directement le backend Symfony
     volumes:
-    - ./workspace:/var/www/html
+      - ./workspace/weLab_backend:/var/www/html
+
     ports:
-    - "8011:8000"
-    - "8021:4200"
+      - "8011:8000"   # Backend Symfony
+      - "8021:4200"   # Frontend Angular
+
     environment:
       PHP_IDE_CONFIG: serverName=contacts
       PS1: "[ $$(whoami) | $$(pwd) ] "
       DATABASE_URL: "postgresql://labo_user:labo_password1234@database:5432/labo_stock?serverVersion=15&charset=utf8"
+
     depends_on:
       - database
-    networks:
-      - welab_network # pour mettre les deux containers sur un seul reseau
 
- # Ajoute ce NOUVEAU service pour PostgreSQL
+    networks:
+      - welab_network
+
+  # Base de données PostgreSQL
   database:
     image: postgres:15-alpine
     container_name: welab-database
@@ -36,16 +46,15 @@ services:
       POSTGRES_USER: labo_user
       POSTGRES_PASSWORD: labo_password1234
     ports:
-      - "5434:5432"  # 5434 sur ta machine, 5432 dans Docker
+      - "5434:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - welab_network # Utilise le réseau
+      - welab_network
 
-# Ajoute ce volume pour persister les données
 volumes:
   postgres_data:
 
 networks:
-  welab_network: ## definir le reseau personel
+  welab_network:
     driver: bridge
