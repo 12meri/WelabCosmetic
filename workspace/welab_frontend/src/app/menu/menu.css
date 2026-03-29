@@ -1,0 +1,145 @@
+/* Barre de navigation principale - fond jaune */
+.nav_container {
+  background-color: #ffd966;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  height: 70px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Logo WelabCosmetic */
+.logo {
+  background: none;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  color: #2c3e50;
+  cursor: pointer;
+  font-family: 'Arial', sans-serif;
+  padding: 0;
+  transition: all 0.3s;
+}
+
+.logo:hover {
+  color: #1a2c3e;
+  transform: scale(1.05);
+}
+
+/* Menu de navigation */
+.button_nav {
+  display: flex;
+  list-style: none;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+.button_nav li {
+  margin: 0;
+}
+
+.button_nav li a {
+  text-decoration: none;
+  color: #2c3e50;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 5px;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+.button_nav li a:hover {
+  background-color: rgba(44, 62, 80, 0.1);
+  color: #1a2c3e;
+}
+
+/* Lien actif */
+.button_nav li a.active {
+  background-color: #2c3e50;
+  color: #ffd966;
+  font-weight: bold;
+}
+
+/* Bouton Se déconnecter */
+.nav_container > button:last-child {
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.nav_container > button:last-child:hover {
+  background-color: #1a2c3e;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Version responsive */
+@media (max-width: 1024px) {
+  .nav_container {
+    padding: 0 20px;
+  }
+  
+  .button_nav {
+    gap: 15px;
+  }
+  
+  .button_nav li a {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav_container {
+    flex-direction: column;
+    height: auto;
+    padding: 15px;
+    gap: 10px;
+  }
+  
+  .button_nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .button_nav li a {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+  
+  .nav_container > button:last-child {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .button_nav {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .button_nav li {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .button_nav li a {
+    display: block;
+    padding: 8px;
+  }
+}

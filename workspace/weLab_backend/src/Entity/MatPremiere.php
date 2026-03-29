@@ -38,7 +38,7 @@ class MatPremiere
     /**
      * @var Collection<int, Fournir>
      */
-    #[ORM\OneToMany(targetEntity: Fournir::class, mappedBy: 'MatPrem')]
+    #[ORM\OneToMany(targetEntity: Fournir::class, mappedBy: 'matPrem')]
     private Collection $fournirs;
 
     /**

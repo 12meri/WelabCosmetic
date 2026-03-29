@@ -47,9 +47,9 @@ class Fournir
         return $this->matPrem;
     }
 
-    public function setMatPrem(?MatPremiere $MatPrem): static
+    public function setMatPrem(?MatPremiere $matPrem): static
     {
-        $this->matPrem = $MatPrem;
+        $this->matPrem = $matPrem;
 
         return $this;
     }

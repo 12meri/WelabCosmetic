@@ -1,0 +1,20 @@
+
+
+<h1>Matieres premieres </h1>
+<table>
+    @for(mp of mp$ | async; track mp.id){
+    <tr>
+        <td>{{ mp.id }}</td>
+        <td>{{ mp.nomMP }}</td>
+        <td>{{ mp.INCI }}</td>
+        <td>{{ mp.NOI }}</td>
+        <td>{{ mp.categorie }}</td>
+        <td>{{ mp.cosmos }}</td>
+        <td>{{ mp.fonction }}</td>
+    </tr>
+    } @empty {
+      <tr>
+        <td colspan="4">Aucune matiere premieres trouvé</td>
+      </tr>
+    }
+</table>
