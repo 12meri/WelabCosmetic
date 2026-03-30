@@ -1,7 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef
+} from '@angular/core';
 import { Observable } from 'rxjs';
-import { MatpremService } from '../services/matiere-premiere.service';
-import { MatierePremiere } from '../models/matiere-premiere.model';
+import { MatpremService } from '../../services/matiere-premiere.service';
+import { MatierePremiere } from '../../models/matiere-premiere.model';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -11,6 +16,7 @@ import { RouterLink } from '@angular/router';
   imports: [AsyncPipe, RouterLink, CommonModule],
   templateUrl: './matieres-premieres.component.html',
   styleUrl: './matieres-premieres.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MpList implements OnInit {
 
@@ -20,26 +26,34 @@ export class MpList implements OnInit {
   successMessage = '';
   errorMessage = '';
 
-  constructor(private mpservice: MatpremService) {}
+  constructor(
+    private mpservice: MatpremService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.mp$ = this.mpservice.mplist();
+    this.cdr.markForCheck();
+  }
+
+  trackById(index: number, item: MatierePremiere) {
+    return item.id;
   }
 
   openDeleteModal(id: number): void {
     this.selectedMpId = id;
     this.showDeleteModal = true;
+    this.cdr.markForCheck();
   }
 
   closeDeleteModal(): void {
     this.showDeleteModal = false;
     this.selectedMpId = null;
+    this.cdr.markForCheck();
   }
 
   confirmDelete(): void {
-    if (this.selectedMpId === null) {
-      return;
-    }
+    if (this.selectedMpId === null) return;
 
     this.successMessage = '';
     this.errorMessage = '';
@@ -52,12 +66,15 @@ export class MpList implements OnInit {
         } else {
           this.errorMessage = '❌ La suppression a échoué';
         }
+
         this.closeDeleteModal();
+        this.cdr.markForCheck();
       },
       error: (error) => {
         console.error('Erreur suppression :', error);
         this.errorMessage = '❌ Erreur lors de la suppression';
         this.closeDeleteModal();
+        this.cdr.markForCheck();
       }
     });
   }

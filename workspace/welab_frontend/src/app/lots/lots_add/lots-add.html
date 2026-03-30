@@ -1,0 +1,133 @@
+<div class="lot-add-container">
+  <h2>Ajouter un lot</h2>
+
+  @if (successMessage) {
+    <div class="alert success">
+      {{ successMessage }}
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="alert error">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <form (ngSubmit)="createLot()" #lotForm="ngForm">
+
+    <div class="form-group">
+      <label for="numLot">Numéro lot</label>
+      <input
+        type="text"
+        id="numLot"
+        name="numLot"
+        [(ngModel)]="lot.numLot"
+        class="form-control"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="dateArrivee">Date arrivée</label>
+      <input
+        type="date"
+        id="dateArrivee"
+        name="dateArrivee"
+        [(ngModel)]="lot.dateArrivee"
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="ddm">DDM</label>
+      <input
+        type="date"
+        id="ddm"
+        name="ddm"
+        [(ngModel)]="lot.ddm"
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="qtInitiale">Quantité initiale</label>
+      <input
+        type="number"
+        id="qtInitiale"
+        name="qtInitiale"
+        [(ngModel)]="lot.qtInitiale"
+        class="form-control"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="qtRestante">Quantité restante</label>
+      <input
+        type="number"
+        id="qtRestante"
+        name="qtRestante"
+        [(ngModel)]="lot.qtRestante"
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="dateMaj">Date MAJ</label>
+      <input
+        type="datetime-local"
+        id="dateMaj"
+        name="dateMaj"
+        [(ngModel)]="lot.dateMaj"
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="qtMin">Quantité minimale</label>
+      <input
+        type="number"
+        id="qtMin"
+        name="qtMin"
+        [(ngModel)]="lot.qtMin"
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="etat">État</label>
+      <select
+        id="etat"
+        name="etat"
+        [(ngModel)]="lot.etat"
+        class="form-control">
+        <option value="OK">OK</option>
+        <option value="ALERTE">ALERTE</option>
+        <option value="EPUISE">EPUISE</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="mp">Matière première (IRI)</label>
+      <input
+        type="text"
+        id="mp"
+        name="mp"
+        [(ngModel)]="lot.mp"
+        class="form-control"
+        placeholder="/api/mat_premieres/1"
+        required
+      />
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-submit" [disabled]="isLoading || lotForm.invalid">
+        {{ isLoading ? 'Ajout...' : 'Ajouter' }}
+      </button>
+
+      <button type="button" class="btn-cancel" (click)="cancel()">
+        Annuler
+      </button>
+    </div>
+  </form>
+</div>

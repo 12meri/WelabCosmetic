@@ -1,5 +1,5 @@
 export interface MatierePremiere {
-  id?: number;
+  id?: number;   // <-- optionnel
   nomMP: string;
   INCI?: string;
   NOI?: string;
@@ -8,6 +8,6 @@ export interface MatierePremiere {
   cosmos?: string;
   fournirs?: string[];
   distribues?: string[];
-lots?: string[];
-demandeEchantillons?: string[];
+  lots?: string[];
+  demandeEchantillons?: string[];
 }

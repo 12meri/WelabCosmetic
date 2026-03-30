@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatpremService } from '../services/matiere-premiere.service';
-import { MatierePremiere } from '../models/matiere-premiere.model';
+import { MatpremService } from '../../services/matiere-premiere.service';
+import { MatierePremiere } from '../../models/matiere-premiere.model';
 
 @Component({
   selector: 'app-mp-edit',

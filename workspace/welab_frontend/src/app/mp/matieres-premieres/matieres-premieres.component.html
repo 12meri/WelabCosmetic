@@ -15,7 +15,8 @@
 }
 
 <table>
-  @for (mp of mp$ | async; track mp.id) {
+  @for (mp of mp$ | async; track trackById) {
+   
     <tr>
       <td>{{ mp.id }}</td>
       <td>{{ mp.nomMP }}</td>

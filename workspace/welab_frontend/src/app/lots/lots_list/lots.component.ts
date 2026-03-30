@@ -1,0 +1,65 @@
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { LotService } from '../../services/lots.service';
+import { Lot } from '../../models/lots.model';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-lots',
+  standalone: true,
+  imports: [AsyncPipe, CommonModule, RouterLink, DatePipe],
+  templateUrl: './lots.component.html',
+  styleUrl: './lots.component.css',
+})
+export class LotsComponent implements OnInit {
+
+  lots$!: Observable<Array<Lot>>;
+  showDeleteModal = false;
+  selectedLotId: number | null = null;
+  successMessage = '';
+  errorMessage = '';
+
+  constructor(private lotService: LotService) {}
+
+  ngOnInit(): void {
+    this.lots$ = this.lotService.lotList();
+  }
+
+  openDeleteModal(id: number): void {
+    this.selectedLotId = id;
+    this.showDeleteModal = true;
+  }
+
+  closeDeleteModal(): void {
+    this.showDeleteModal = false;
+    this.selectedLotId = null;
+  }
+
+  confirmDelete(): void {
+    if (this.selectedLotId === null) {
+      return;
+    }
+
+    this.successMessage = '';
+    this.errorMessage = '';
+
+    this.lotService.deleteLot(this.selectedLotId).subscribe({
+      next: (success) => {
+        if (success) {
+          this.successMessage = '✅ Lot supprimé avec succès';
+          this.lots$ = this.lotService.lotList();
+        } else {
+          this.errorMessage = '❌ La suppression a échoué';
+        }
+        this.closeDeleteModal();
+      },
+      error: (error) => {
+        console.error('Erreur suppression lot :', error);
+        this.errorMessage = '❌ Erreur lors de la suppression';
+        this.closeDeleteModal();
+      }
+    });
+  }
+}

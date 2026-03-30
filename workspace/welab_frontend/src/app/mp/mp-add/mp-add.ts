@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { MatpremService } from '../services/matiere-premiere.service';
-import { MatierePremiere } from '../models/matiere-premiere.model';
+import { MatpremService } from '../../services/matiere-premiere.service';
+import { MatierePremiere } from '../../models/matiere-premiere.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 export class MpAdd implements OnInit { // Implémente OnInit
   // Formulaire data
   mp: MatierePremiere = {
+    // Ajout d'un id par défaut
     nomMP: '',
     INCI: '',
     NOI: '',

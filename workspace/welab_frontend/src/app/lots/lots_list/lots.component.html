@@ -1,0 +1,103 @@
+<div class="page-container">
+  <h1>Lots</h1>
+
+  <div class="top-bar">
+    <div class="welcome-box">
+      <p>Gestion des lots</p>
+      <p><strong>Suivi du stock</strong></p>
+    </div>
+
+    <div class="page-action">
+       <a routerLink="/lots/add" class="btn-add">Ajouter</a>
+    
+    </div>
+  </div>
+
+  @if (successMessage) {
+    <div class="alert success">
+      {{ successMessage }}
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="alert error">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Numéro lot</th>
+          <th>Date arrivée</th>
+          <th>DDM</th>
+          <th>Qt initiale</th>
+          <th>Qt restante</th>
+          <th>Date MAJ</th>
+          <th>Qt min</th>
+          <th>Etat</th>
+          <th>Matière première</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (lot of lots$ | async; track lot.id) {
+          <tr>
+            <td>{{ lot.id }}</td>
+            <td>{{ lot.numLot }}</td>
+            <td>{{ lot.dateArrivee | date:'dd/MM/yyyy' }}</td>
+            <td>{{ lot.ddm | date:'dd/MM/yyyy' }}</td>
+            <td>{{ lot.qtInitiale }}</td>
+            <td>{{ lot.qtRestante }}</td>
+            <td>{{ lot.dateMaj | date:'dd/MM/yyyy' }}</td>
+            <td>{{ lot.qtMin }}</td>
+            <td>
+              <span [class.etat-ok]="lot.etat === 'OK'"
+                    [class.etat-faible]="lot.etat === 'FAIBLE'"
+                    [class.etat-critique]="lot.etat === 'CRITIQUE'">
+                {{ lot.etat }}
+              </span>
+            </td>
+            <td>{{ lot.mp }}</td>
+            <td class="actions-cell">
+              @if (lot.id) {
+                <button (click)="openDeleteModal(lot.id)" class="btn-delete">
+                  supprimer
+                </button>
+
+                <a [routerLink]="['/lots/edit', lot.id]" class="btn-update">
+                  modifier
+                </a>
+              }
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="11" class="empty">Aucun lot trouvé</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+@if (showDeleteModal) {
+  <div class="modal-backdrop">
+    <div class="modal-box">
+      <h3>Confirmer la suppression</h3>
+      <p>Voulez-vous vraiment supprimer ce lot ?</p>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="closeDeleteModal()">
+          Annuler
+        </button>
+        <button class="btn-delete" (click)="confirmDelete()">
+          Supprimer
+        </button>
+      </div>
+    </div>
+  </div>
+}
