@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatieresPremieresComponent } from '../matieres-premieres/matieres-premieres.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +14,10 @@ export class LoginComponent {
   username = '';
   password = '';
 
+  constructor(private router: Router) {}
+
   onSubmit() {
     console.log(this.username, this.password);
+    this.router.navigate(['/matpremieres']);
   }
 }

@@ -1,48 +1,29 @@
-<div class="page">
-  <h1>Liste des matières premières</h1>
+<h1>Matieres premieres </h1>
 
-  <div *ngIf="error" class="alert alert-danger">
-    {{ error }}
-    <button class="btn-retry" (click)="chargerMatieres()">Réessayer</button>
-  </div>
+<a routerLink="add">Ajouter</a>
 
-  <div *ngIf="loading" class="loading">
-    <p>Chargement en cours...</p>
-  </div>
+<table>
+  @for(mp of mp$ | async; track mp.id){
+  <tr>
+    <td>{{ mp.id }}</td>
+    <td>{{ mp.nomMP }}</td>
+    <td>{{ mp.INCI }}</td>
+    <td>{{ mp.NOI }}</td>
+    <td>{{ mp.categorie }}</td>
+    <td>{{ mp.cosmos }}</td>
+    <td>{{ mp.fonction }}</td>
 
-  <div *ngIf="!loading && matieres.length > 0" class="table-container">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nom</th>
-          <th>INCI</th>
-          <th>NOI</th>
-          <th>Catégorie</th>
-          <th>Fonction</th>
-          <th>Cosmos</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let matiere of matieres">
-          <td>{{ matiere.id }}</td>
-          <td>{{ matiere.nomMP }}</td>
-          <td>{{ matiere.INCI || '-' }}</td>
-          <td>{{ matiere.NOI || '-' }}</td>
-          <td>{{ matiere.categorie || '-' }}</td>
-          <td>{{ matiere.fonction || '-' }}</td>
-          <td>{{ matiere.cosmos || '-' }}</td>
-          <td>
-            <button class="btn-edit">Modifier</button>
-            <button class="btn-delete" (click)="supprimer(matiere.id)">Supprimer</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <!-- ✅ ICI TU AJOUTES LE BOUTON -->
+    <td>
+      <a [routerLink]="['/matpremieres/edit', mp.id]" class="btn-update">
+        Modifier
+      </a>
+    </td>
 
-  <div *ngIf="!loading && matieres.length === 0" class="empty-state">
-    <p>Aucune matière première trouvée</p>
-  </div>
-</div>
+  </tr>
+  } @empty {
+    <tr>
+      <td colspan="8">Aucune matiere premieres trouvé</td>
+    </tr>
+  }
+</table>

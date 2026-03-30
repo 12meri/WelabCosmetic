@@ -1,0 +1,118 @@
+<div class="mp-add-container">
+  <h2>Ajouter une matière première</h2>
+  
+  <!-- Messages -->
+  <div *ngIf="successMessage" class="alert success">
+    {{ successMessage }}
+  </div>
+  
+  <div *ngIf="errorMessage" class="alert error">
+    {{ errorMessage }}
+  </div>
+  
+  <!-- Formulaire -->
+  <form (ngSubmit)="createMp()" #mpForm="ngForm">
+    <div class="form-group">
+      <label for="nomMP">Nom de la matière première *</label>
+      <input 
+        type="text" 
+        id="nomMP" 
+        name="nomMP" 
+        [(ngModel)]="mp.nomMP" 
+        required
+        class="form-control">
+    </div>
+    
+    <div class="form-group">
+      <label for="INCI">INCI *</label>
+      <input 
+        type="text" 
+        id="INCI" 
+        name="INCI" 
+        [(ngModel)]="mp.INCI" 
+        required
+        class="form-control">
+    </div>
+    
+    <div class="form-group">
+      <label for="NOI">NOI (Natural Origin Index)</label>
+      <input 
+        type="text" 
+        id="NOI" 
+        name="NOI" 
+        [(ngModel)]="mp.NOI" 
+        class="form-control">
+    </div>
+    
+    <div class="form-group">
+      <label for="categorie">Catégorie *</label>
+      <select 
+        id="categorie" 
+        name="categorie" 
+        [(ngModel)]="mp.categorie" 
+        required
+        class="form-control">
+        <option value="">Sélectionner</option>
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+        <option value="D">D</option>
+        <option value="E">E</option>
+        <option value="F">F</option>
+        <option value="G">G</option>
+        <option value="H">H</option>
+        <option value="I">I</option>
+        <option value="J">J</option>
+        <option value="K">K</option>
+        <option value="L">L</option>
+        <option value="M">M</option>
+        <option value="N">N</option>
+        <option value="O">O</option>
+        <option value="P">P</option>
+        <option value="Q">Q</option>
+        <option value="R">R</option>
+        <option value="S">S</option>
+        <option value="T">T</option>
+        <option value="U">U</option>
+        <option value="V">V</option>
+        <option value="W">W</option>
+        <option value="X">X</option>
+        <option value="Z">Z</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label for="cosmos">COSMOS *</label>
+      <select 
+        id="cosmos" 
+        name="cosmos" 
+        [(ngModel)]="mp.cosmos" 
+        required
+        class="form-control">
+        <option value="">Sélectionner</option>
+        <option value="OUI">OUI</option>
+        <option value="NON">NON</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label for="fonction">Fonction *</label>
+      <textarea 
+        id="fonction" 
+        name="fonction" 
+        [(ngModel)]="mp.fonction" 
+        required
+        rows="3"
+        class="form-control"></textarea>
+    </div>
+    
+    <div class="form-actions">
+      <button type="submit" [disabled]="isLoading || !mpForm.valid" class="btn-submit">
+        {{ isLoading ? 'Création en cours...' : 'Créer' }}
+      </button>
+      <button type="button" (click)="cancel()" class="btn-cancel">
+        Annuler
+      </button>
+    </div>
+  </form>
+</div>

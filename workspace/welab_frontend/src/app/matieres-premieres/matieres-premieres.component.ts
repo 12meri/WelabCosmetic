@@ -1,58 +1,38 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatierePremiereService } from '../services/matiere-premiere.service';
+import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { MatpremService } from '../services/matiere-premiere.service';
 import { MatierePremiere } from '../models/matiere-premiere.model';
-import { ApiResponse } from '../services/api-response';
+import { AsyncPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-matieres-premieres',
+  selector: 'app-mp-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [AsyncPipe, RouterLink],
   templateUrl: './matieres-premieres.component.html',
-  styleUrl: './matieres-premieres.component.css'
+  styleUrl: './matieres-premieres.component.css',
 })
-export class MatieresPremieresComponent implements OnInit {
+export class MpList implements OnInit {
 
-  matieres: MatierePremiere[] = [];
-  loading: boolean = true;
-  error: string | null = null;
+  mp$!: Observable<Array<MatierePremiere>>;
 
-  constructor(private matiereService: MatierePremiereService) {}
+  constructor(
+    private mpservice: MatpremService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    this.chargerMatieres();
-  }
+    this.mp$ = this.mpservice.mplist();
 
-  chargerMatieres(): void {
-    this.loading = true;
-    this.error = null;
-
-    this.matiereService.getAllMatieres().subscribe({
-      next: (data: ApiResponse<MatierePremiere>) => {
-        console.log('Données reçues:', data);
-        this.matieres = data.member;   // <-- LIGNE ESSENTIELLE
-        this.loading = false;
+    this.mp$.subscribe({
+      next: (mps) => {
+        console.log('mp recus :', mps);
+        console.log('premiere mp :', mps[0]);
+        this.cdr.detectChanges();
       },
-      error: (err) => {
-        console.error('Erreur détaillée:', err);
-        this.error = err.message || 
-          'Impossible de charger les matières premières. Vérifiez que l’API est accessible.';
-        this.loading = false;
+      error: (error) => {
+        console.error('Erreur lors du chargement des matieres premieres :', error);
       }
     });
-  }
-
-  supprimer(id: number): void {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cette matière première ?')) {
-      this.matiereService.deleteMatiere(id).subscribe({
-        next: () => {
-          this.chargerMatieres();
-        },
-        error: (err) => {
-          console.error('Erreur lors de la suppression:', err);
-          this.error = 'Erreur lors de la suppression';
-        }
-      });
-    }
   }
 }
