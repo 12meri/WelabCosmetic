@@ -1,6 +1,9 @@
 
 
 <h1>Matieres premieres </h1>
+
+<a routerLink="add">Ajouter</a>
+
 <table>
     @for(mp of mp$ | async; track mp.id){
     <tr>
@@ -18,3 +21,24 @@
       </tr>
     }
 </table>
+<!-- Indicateur de chargement -->
+<div *ngIf="isLoading" class="loading-spinner">
+  Chargement des matières premières...
+</div>
+
+<!-- Message d'erreur -->
+<div *ngIf="errorMessage" class="error-message">
+  {{ errorMessage }}
+</div>
+
+<!-- Liste des matières premières -->
+<div *ngIf="!isLoading && !errorMessage">
+  <div *ngFor="let mp of mp$ | async">
+    <!-- Votre contenu existant -->
+  </div>
+</div>
+
+<!-- Optionnel : bouton pour recharger -->
+<button *ngIf="errorMessage" (click)="reload()">
+  Réessayer
+</button>

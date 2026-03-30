@@ -47,13 +47,17 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": false
             }
           },
           "defaultConfiguration": "development"
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {                           
+            "hmr": true,                         
+            "poll": 0                            
+  },
           "configurations": {
             "production": {
               "buildTarget": "welab_frontend:build:production"

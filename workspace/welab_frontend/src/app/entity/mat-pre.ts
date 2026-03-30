@@ -1,5 +1,5 @@
 export interface MatPre {
-  id: number;
+  id?: number;
   nomMP: string;
   INCI: string;
   NOI: string;

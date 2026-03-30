@@ -40,4 +40,13 @@ class MatPremiereRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    // 🔥 AJOUTE CETTE MÉTHODE
+   // src/Repository/MatPremiereRepository.php
+public function findAllWithoutRelations(): array
+{
+    // 🔥 Charge seulement les matières, pas les relations
+    return $this->createQueryBuilder('m')
+        ->getQuery()
+        ->getResult();
+}
 }

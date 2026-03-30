@@ -17,7 +17,8 @@ private headers = new HttpHeaders({ 'Content-Type': 'application/ld+json' });
  private patch_headers =
     new HttpHeaders({ 'Content-Type': 'application/merge-patch+json' });
     // pour modification lentete doit etre application/merge-patch+json et pas id+json 
-
+  private fournisseursUrl = '/api/fournirs';  // API des fournisseurs
+  private distributeursUrl = '/api/distribues';  // API des distributeurs
 
 // constructeur 
   constructor( http: HttpClient){
@@ -33,4 +34,36 @@ public  mplist(): Observable<Array<MatPre>>{
 // faut preciser ApiResponse pour lavoir de la forme member[leement]
   
 } 
+ getFournisseurs(): Observable<any[]> {
+    return this.http.get<any[]>(this.fournisseursUrl);
+  }
+
+  // Récupérer tous les distributeurs (pour le select)
+  getDistributeurs(): Observable<any[]> {
+    return this.http.get<any[]>(this.distributeursUrl);
+  }
+
+// Créer une matière première
+  createMp(mp: MatPre): Observable<boolean> {
+    // Ne pas envoyer les lots et demandeEchantillons s'ils sont vides
+    const mpToSend = {
+      nomMP: mp.nomMP,
+      INCI: mp.INCI,
+      NOI: mp.NOI || null,
+      categorie: mp.categorie,
+      fonction: mp.fonction,
+      cosmos: mp.cosmos,
+      fournirs: mp.fournirs || [],  // Envoyer les IDs des fournisseurs sélectionnés
+      distribues: mp.distribues || []  // Envoyer les IDs des distributeurs sélectionnés
+      // lots et demandeEchantillons ne sont PAS envoyés
+    };
+    
+    return this.http.post(this.url, mpToSend, { 
+      headers: this.headers, 
+      observe: 'response' 
+    }).pipe(
+      map((response) => response.status === 201)
+    );
+  }
+
 }

@@ -7,6 +7,7 @@ use App\Repository\MatPremiereRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: MatPremiereRepository::class)]
 #[ApiResource()]
@@ -15,48 +16,59 @@ class MatPremiere
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+     #[Groups(['mp:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 200)]
+     #[Groups(['mp:read'])]
     private ?string $nomMP = null;
 
     #[ORM\Column(length: 200, nullable: true)]
+     #[Groups(['mp:read'])]
     private ?string $INCI = null;
 
     #[ORM\Column(length: 60, nullable: true)]
+     #[Groups(['mp:read'])]
     private ?string $NOI = null;
 
     #[ORM\Column(length: 80, nullable: true)]
+     #[Groups(['mp:read'])]
     private ?string $categorie = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+     #[Groups(['mp:read'])]
     private ?string $fonction = null;
 
     #[ORM\Column(length: 10, nullable: true)]
+     #[Groups(['mp:read'])]
     private ?string $cosmos = null;
 
     /**
      * @var Collection<int, Fournir>
      */
     #[ORM\OneToMany(targetEntity: Fournir::class, mappedBy: 'matPrem')]
+     #[Groups(['mp:read'])]
     private Collection $fournirs;
 
     /**
      * @var Collection<int, Distribue>
      */
     #[ORM\OneToMany(targetEntity: Distribue::class, mappedBy: 'mp')]
+     #[Groups(['mp:read'])]
     private Collection $distribues;
 
     /**
      * @var Collection<int, Lot>
      */
     #[ORM\OneToMany(targetEntity: Lot::class, mappedBy: 'mp')]
+     #[Groups(['mp:read'])]
     private Collection $lots;
 
     /**
      * @var Collection<int, DemandeEchantillon>
      */
     #[ORM\OneToMany(targetEntity: DemandeEchantillon::class, mappedBy: 'mp')]
+     #[Groups(['mp:read'])]
     private Collection $demandeEchantillons;
 
 
