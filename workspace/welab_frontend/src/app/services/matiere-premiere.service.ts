@@ -70,6 +70,14 @@ public  mplist(): Observable<Array<MatierePremiere>>{
   getMpById(id: number): Observable<MatierePremiere> {
     return this.http.get<MatierePremiere>(`${this.url}/${id}`);
   }
+  // supprimer une matière première
+deleteMp(id: number): Observable<boolean> {
+  return this.http.delete(`${this.url}/${id}`, {
+    observe: 'response'
+  }).pipe(
+    map((response) => response.status === 200 || response.status === 204)
+  );
+}
 // modifier une matière première
   updateMp(id: number, mp: MatierePremiere): Observable<boolean> {
     const mpToSend = {
