@@ -1,5 +1,4 @@
 FROM php:8.4-fpm-alpine
-
 ARG USERNAME
 ARG UID
 ARG EMAIL
@@ -10,36 +9,39 @@ RUN echo "$USERNAME ($UID)"
 RUN echo "$NAME ($EMAIL)"
 RUN echo "==============================="
 
-# Mise à jour + installation bash, git, shadow
-RUN apk upgrade && apk --no-cache add bash git shadow wget
+# installation bash
+RUN apk upgrade && apk --no-cache add bash git shadow
 
-# Installation NodeJS + npm
-RUN apk --no-cache add nodejs npm
+# installation npm et nodejs
+RUN apk --no-cache add npm nodejs>=22
 
-# Installation Composer
+# installation de composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-    && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
-    && php -r "unlink('composer-setup.php');"
+&& php composer-setup.php --install-dir=/usr/local/bin \
+&& php -r "unlink('composer-setup.php');"
 
-# Installation Symfony CLI
+# installation de symfony
 RUN wget https://get.symfony.com/cli/installer -O - | bash \
-    && mv /root/.symfony*/bin/symfony /usr/local/bin/symfony
+&& mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
 
-# Installation Angular CLI
+# installation de Angular
 RUN npm install -g typescript @angular/cli@^21
 
-# Installation du driver PostgreSQL pour PHP
+
+# Installation de PostgreSQL pour PHP
 RUN apk add --no-cache postgresql-dev \
-    && docker-php-ext-install pdo_pgsql pgsql
+    && docker-php-ext-install pdo_pgsql
 
-# Gestion utilisateur
-RUN echo "UID_MAX 9223372036854775807" > /etc/login.defs \
-    && useradd -m -s /bin/sh -u "$UID" "$USERNAME"
-
+# Gestion user
+RUN echo "UID_MAX 9223372036854775807" > /etc/login.defs
+RUN /usr/sbin/useradd -m -s /bin/sh -u "$UID" $USERNAME
 USER $USERNAME
 
-# Configuration Git
-RUN git config --global user.email "$EMAIL" \
-    && git config --global user.name "$NAME"
+# config git
+RUN git config --global user.email "$EMAIL"
+RUN git config --global user.name "$NAME"
 
 WORKDIR /var/www/html
+
+
+    

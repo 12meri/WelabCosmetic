@@ -22,7 +22,7 @@ export class LotService {
 
   constructor(private http: HttpClient) {}
 
-  // Liste des lots
+  // 📋 Liste des lots
   lotList(): Observable<Array<Lot>> {
     return this.http.get<ApiResponse<Lot>>(this.url, {
       observe: 'body',
@@ -32,48 +32,89 @@ export class LotService {
     );
   }
 
-  // Récupérer un lot par id
+  // 🔍 Récupérer un lot
   getLotById(id: number): Observable<Lot> {
     return this.http.get<Lot>(`${this.url}/${id}`);
   }
 
-  // Ajouter un lot
+  // ✅ AJOUT LOT (CORRIGÉ STRING)
   createLot(lot: Lot): Observable<boolean> {
-    const lotToSend = {
+    const lotToSend: any = {
       numLot: lot.numLot,
-      dateArrivee: lot.dateArrivee || null,
-      ddm: lot.ddm || null,
-      qtInitiale: lot.qtInitiale,
-      qtRestante: lot.qtRestante || null,
-      dateMaj: lot.dateMaj || null,
-      qtMin: lot.qtMin || null,
+      qtInitiale: String(lot.qtInitiale), // 🔥 IMPORTANT
       etat: lot.etat || 'OK',
-      mp: lot.mp,
-      demandeEchantillon: lot.demandeEchantillon || null
+      mp: lot.mp
     };
+
+    if (lot.dateArrivee) {
+      lotToSend.dateArrivee = lot.dateArrivee;
+    }
+
+    if (lot.ddm) {
+      lotToSend.ddm = lot.ddm;
+    }
+
+    if (lot.qtRestante !== '' && lot.qtRestante !== undefined) {
+      lotToSend.qtRestante = String(lot.qtRestante); // 🔥
+    }
+
+    if (lot.dateMaj) {
+      lotToSend.dateMaj = lot.dateMaj;
+    }
+
+    if (lot.qtMin !== '' && lot.qtMin !== undefined) {
+      lotToSend.qtMin = String(lot.qtMin); // 🔥
+    }
+
+    if (lot.demandeEchantillon) {
+      lotToSend.demandeEchantillon = lot.demandeEchantillon;
+    }
+
+    console.log('Payload envoyé :', lotToSend);
 
     return this.http.post(this.url, lotToSend, {
       headers: this.headers,
       observe: 'response'
     }).pipe(
-      map((response) => response.status === 201)
+      map((response) => {
+        console.log('Réponse POST :', response);
+        return response.status === 201;
+      })
     );
   }
 
-  // Modifier un lot
+  // ✏️ MODIFIER LOT (CORRIGÉ STRING)
   updateLot(id: number, lot: Lot): Observable<boolean> {
-    const lotToSend = {
+    const lotToSend: any = {
       numLot: lot.numLot,
-      dateArrivee: lot.dateArrivee || null,
-      ddm: lot.ddm || null,
-      qtInitiale: lot.qtInitiale,
-      qtRestante: lot.qtRestante || null,
-      dateMaj: lot.dateMaj || null,
-      qtMin: lot.qtMin || null,
+      qtInitiale: String(lot.qtInitiale), // 🔥
       etat: lot.etat || 'OK',
-      mp: lot.mp,
-      demandeEchantillon: lot.demandeEchantillon || null
+      mp: lot.mp
     };
+
+    if (lot.dateArrivee) {
+      lotToSend.dateArrivee = lot.dateArrivee;
+    }
+
+    if (lot.ddm) {
+      lotToSend.ddm = lot.ddm;
+    }
+
+    if (lot.qtRestante !== '' && lot.qtRestante !== undefined) {
+      lotToSend.qtRestante = String(lot.qtRestante); // 🔥
+    }
+
+    if (lot.dateMaj) {
+      lotToSend.dateMaj = lot.dateMaj;
+    }
+
+    if (lot.qtMin !== '' && lot.qtMin !== undefined) {
+      lotToSend.qtMin = String(lot.qtMin); // 🔥
+    }
+
+    if (lot.demandeEchantillon) {
+      lotToSend.demandeEchantillon = lot.demandeEchantillon;
+    }
 
     return this.http.patch(`${this.url}/${id}`, lotToSend, {
       headers: this.patchHeaders,
@@ -83,7 +124,7 @@ export class LotService {
     );
   }
 
-  // Supprimer un lot
+  // 🗑️ SUPPRIMER LOT
   deleteLot(id: number): Observable<boolean> {
     return this.http.delete(`${this.url}/${id}`, {
       observe: 'response'
