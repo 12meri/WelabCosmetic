@@ -9,6 +9,7 @@ import { MpEdit } from './mp/mp-edit/mp-edit';
 import { LotsComponent } from './lots/lots_list/lots.component';
 import { DemandeEchantillonAdd } from './demande-echantillon/demande-echantillon-add/demande-echantillon-add';
 import { DemandeEchantillonList } from './demande-echantillon/demande-echantillon-list/demande-echantillon-list';
+import { AlerteList } from './alerte-list/alerte-list';
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'matpremieres', component: MpList },
@@ -20,4 +21,6 @@ export const routes: Routes = [
   { path: 'lots/edit/:id', component: LotEdit },
   { path: 'demande-echantillon/add', component: DemandeEchantillonAdd },
   { path: 'demande-echantillon', component: DemandeEchantillonList },
+  { path: 'alertes', component: AlerteList },
+
 ];

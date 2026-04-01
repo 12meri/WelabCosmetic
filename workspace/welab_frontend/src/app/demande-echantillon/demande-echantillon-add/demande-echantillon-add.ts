@@ -43,6 +43,39 @@ export class DemandeEchantillonAdd implements OnInit {
 
   ngOnInit(): void {
     this.loadMatieresPremieres();
+
+    const navigation = this.router.getCurrentNavigation();
+    const alerte = navigation?.extras.state?.['alerte'];
+
+    if (alerte) {
+      console.log('Alerte reçue :', alerte);
+
+      if (alerte.id) {
+        this.demande.alerte = `/api/alertes/${alerte.id}`;
+      }
+
+      if (typeof alerte.lot === 'string') {
+        this.http.get<any>('http://localhost:8011' + alerte.lot).subscribe({
+          next: (lot) => {
+            console.log('Lot récupéré depuis API :', lot);
+            this.demande.mp = lot.mp || '';
+
+            if (this.demande.mp) {
+              this.loadFournisseursByMp(this.demande.mp);
+            }
+          },
+          error: (error) => {
+            console.error('Erreur chargement lot depuis alerte :', error);
+          }
+        });
+      } else if (alerte.lot && alerte.lot.mp) {
+        this.demande.mp = alerte.lot.mp;
+
+        if (this.demande.mp) {
+          this.loadFournisseursByMp(this.demande.mp);
+        }
+      }
+    }
   }
 
   loadMatieresPremieres(): void {
@@ -57,27 +90,37 @@ export class DemandeEchantillonAdd implements OnInit {
   }
 
   loadFournisseursByMp(mpIri: string): void {
-  this.http.get<any>('http://localhost:8011/api/fournirs').subscribe({
-    next: (data) => {
-      const fournirs = data.member || data['hydra:member'] || [];
+    this.demande.fournisseur = '';
+    this.fournisseurs = [];
 
-      const fournisseurIris = fournirs
-        .filter((f: any) => f.matPrem === mpIri)
-        .map((f: any) => f.fournisseur);
+    this.http.get<any>('http://localhost:8011/api/fournirs').subscribe({
+      next: (data) => {
+        const fournirs = data.member || data['hydra:member'] || [];
 
-      // charger les vrais fournisseurs
-      this.http.get<any>('http://localhost:8011/api/fournisseurs').subscribe({
-        next: (data) => {
-          const allFournisseurs = data.member || data['hydra:member'] || [];
+        const fournisseurIris = fournirs
+          .filter((f: any) => f.matPrem === mpIri)
+          .map((f: any) => f.fournisseur);
 
-          this.fournisseurs = allFournisseurs.filter((f: any) =>
-            fournisseurIris.includes(`/api/fournisseurs/${f.id}`)
-          );
-        }
-      });
-    }
-  });
-}
+        this.http.get<any>('http://localhost:8011/api/fournisseurs').subscribe({
+          next: (data) => {
+            const allFournisseurs = data.member || data['hydra:member'] || [];
+
+            this.fournisseurs = allFournisseurs.filter((f: any) =>
+              fournisseurIris.includes(`/api/fournisseurs/${f.id}`)
+            );
+
+            console.log('Fournisseurs filtrés :', this.fournisseurs);
+          },
+          error: (error) => {
+            console.error('Erreur chargement fournisseurs :', error);
+          }
+        });
+      },
+      error: (error) => {
+        console.error('Erreur chargement fournirs :', error);
+      }
+    });
+  }
 
   getMpIri(mp: MatierePremiere): string {
     return `/api/mat_premieres/${mp.id}`;
@@ -119,7 +162,6 @@ export class DemandeEchantillonAdd implements OnInit {
       }
     });
   }
-  
 
   cancel(): void {
     this.router.navigate(['/demande-echantillon']);

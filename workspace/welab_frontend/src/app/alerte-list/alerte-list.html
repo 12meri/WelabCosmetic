@@ -1,0 +1,59 @@
+<div class="alertes-container">
+  <h1>Liste des Alertes</h1>
+
+  @if (successMessage) {
+    <div class="alert success">{{ successMessage }}</div>
+  }
+
+  @if (error) {
+    <div class="alert error">{{ error }}</div>
+  }
+
+  <table class="alertes-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Type</th>
+        <th>État</th>
+        <th>Date</th>
+        <th>Message</th>
+        <th>Lot</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+  @for (alerte of alertes; track alerte.id) {
+    <tr>
+      <td>{{ alerte.id }}</td>
+      <td>{{ alerte.typeAlerte }}</td>
+
+      <!-- État affiché en texte simple -->
+      <td>{{ alerte.etatAlerte }}</td>
+
+      <td>{{ alerte.dateAlerte | date:'dd/MM/yyyy HH:mm' }}</td>
+      <td>{{ alerte.message }}</td>
+      <td>{{ getLotId(alerte) }}</td>
+
+      <td>
+        <!-- Bouton Ignorer : visible seulement si pas encore ignorée -->
+        @if (alerte.etatAlerte !== 'IGNOREE') {
+          <button (click)="ignorerAlerte(alerte.id)" class="btn-ignorer">
+            Ignorer
+          </button>
+        }
+
+        @if (alerte.etatAlerte !== 'IGNOREE') {
+    <button (click)="demanderEchantillon(alerte)" class="btn-echantillon">
+      Demande échantillon
+    </button>
+  }
+      </td>
+    </tr>
+  } @empty {
+    <tr>
+      <td colspan="7" class="empty">Aucune alerte trouvée</td>
+    </tr>
+  }
+</tbody>
+  </table>
+
