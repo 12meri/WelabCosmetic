@@ -22,7 +22,7 @@ export class LotService {
 
   constructor(private http: HttpClient) {}
 
-  // 📋 Liste des lots
+  // Liste des lots
   lotList(): Observable<Array<Lot>> {
     return this.http.get<ApiResponse<Lot>>(this.url, {
       observe: 'body',
@@ -32,12 +32,12 @@ export class LotService {
     );
   }
 
-  // 🔍 Récupérer un lot
+  // Récupérer un lot
   getLotById(id: number): Observable<Lot> {
     return this.http.get<Lot>(`${this.url}/${id}`);
   }
 
-  // ✅ AJOUT LOT (CORRIGÉ STRING)
+  // AJOUT LOT 
   createLot(lot: Lot): Observable<boolean> {
     const lotToSend: any = {
       numLot: lot.numLot,
@@ -83,7 +83,7 @@ export class LotService {
     );
   }
 
-  // ✏️ MODIFIER LOT (CORRIGÉ STRING)
+  // MODIFIER LOT 
   updateLot(id: number, lot: Lot): Observable<boolean> {
     const lotToSend: any = {
       numLot: lot.numLot,
@@ -124,7 +124,7 @@ export class LotService {
     );
   }
 
-  // 🗑️ SUPPRIMER LOT
+  // SUPPRIMER LOT
   deleteLot(id: number): Observable<boolean> {
     return this.http.delete(`${this.url}/${id}`, {
       observe: 'response'
