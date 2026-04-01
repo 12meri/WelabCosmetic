@@ -61,7 +61,7 @@
                 {{ lot.etat }}
               </span>
             </td>
-            <td>{{ lot.mp }}</td>
+            <td>{{ getMpName(lot.mp) }}</td>
             <td class="actions-cell">
               @if (lot.id) {
                 <button (click)="openDeleteModal(lot.id)" class="btn-delete">

@@ -1,7 +1,7 @@
 <div class="lot-add-container">
-  <h2>Ajouter un lot</h2>
+  <h2>Modifier un lot</h2>
 
-  <form (ngSubmit)="createLot()" #lotForm="ngForm">
+  <form (ngSubmit)="updateLot()" #lotForm="ngForm">
 
     <div class="form-group">
       <label for="numLot">Numéro du lot</label>
@@ -37,7 +37,6 @@
       />
     </div>
 
-    <!-- ✅ IMPORTANT : TEXT et pas NUMBER -->
     <div class="form-group">
       <label for="qtInitiale">Quantité initiale</label>
       <input
@@ -100,7 +99,6 @@
       </select>
     </div>
 
-    <!-- ✅ LISTE DÉROULANTE -->
     <div class="form-group">
       <label for="mp">Matière première</label>
       <select
@@ -117,24 +115,17 @@
       </select>
     </div>
 
-    <!-- 🔄 chargement -->
-    <div *ngIf="isLoadingMp" class="alert">
-      Chargement des matières premières...
-    </div>
-
-    <!-- ✅ succès -->
     <div *ngIf="successMessage" class="alert success">
       {{ successMessage }}
     </div>
 
-    <!-- ❌ erreur -->
     <div *ngIf="errorMessage" class="alert error">
       {{ errorMessage }}
     </div>
 
     <div class="form-actions">
-      <button type="submit" class="btn-submit" [disabled]="isLoading || isLoadingMp">
-        {{ isLoading ? 'Ajout...' : 'Ajouter' }}
+      <button type="submit" class="btn-submit" [disabled]="isLoading">
+        {{ isLoading ? 'Modification...' : 'Modifier' }}
       </button>
 
       <button type="button" class="btn-cancel" (click)="cancel()">

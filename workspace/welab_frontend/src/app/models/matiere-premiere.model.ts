@@ -1,5 +1,6 @@
 export interface MatierePremiere {
   id?: number;   // <-- optionnel
+  '@id'?: string;
   nomMP: string;
   INCI?: string;
   NOI?: string;

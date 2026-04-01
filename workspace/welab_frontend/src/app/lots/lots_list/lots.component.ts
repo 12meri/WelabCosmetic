@@ -3,8 +3,9 @@ import { Observable } from 'rxjs';
 import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { LotService } from '../../services/lots.service';
+import { MatpremService } from '../../services/matiere-premiere.service';
 import { Lot } from '../../models/lots.model';
-import { Router } from '@angular/router';
+import { MatierePremiere } from '../../models/matiere-premiere.model';
 
 @Component({
   selector: 'app-lots',
@@ -16,15 +17,43 @@ import { Router } from '@angular/router';
 export class LotsComponent implements OnInit {
 
   lots$!: Observable<Array<Lot>>;
+  matieresPremieres: any[] = [];
+
   showDeleteModal = false;
   selectedLotId: number | null = null;
   successMessage = '';
   errorMessage = '';
 
-  constructor(private lotService: LotService) {}
+  constructor(
+    private lotService: LotService,
+    private mpservice: MatpremService
+  ) {}
 
   ngOnInit(): void {
     this.lots$ = this.lotService.lotList();
+
+    this.mpservice.mplist().subscribe({
+      next: (data) => {
+        console.log('Matières premières reçues :', data);
+        this.matieresPremieres = data;
+      },
+      error: (error) => {
+        console.error('Erreur chargement matières premières :', error);
+      }
+    });
+  }
+
+  getMpName(mpIri: any): string {
+    if (!mpIri) {
+      return '';
+    }
+
+    const mp = this.matieresPremieres.find(m =>
+      m['@id'] === mpIri ||
+      `/api/mat_premieres/${m.id}` === mpIri
+    );
+
+    return mp ? mp.nomMP : mpIri;
   }
 
   openDeleteModal(id: number): void {
