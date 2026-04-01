@@ -262,3 +262,12 @@ const ETAT_IGNOREE = 'IGNOREE';
 
 // ajouter alerte a demande echantillon
 les demande echantillon dans les fixture de lot sont null par souci dodre denregistrement lots -- alertes -- demandeEchantillon -- lots sinon ca fera une boucle indecise
+
+# gerer les utilisateurs
+
+installer les bundles 
+composer require lexik/jwt-authentication-bundle
+composer require symfony/security-bundle
+
+dans symfony 
+php bin/console lexik:jwt:generate-keypair

@@ -36,17 +36,17 @@
 
       <td>
         <!-- Bouton Ignorer : visible seulement si pas encore ignorée -->
-        @if (alerte.etatAlerte !== 'IGNOREE') {
-          <button (click)="ignorerAlerte(alerte.id)" class="btn-ignorer">
-            Ignorer
-          </button>
-        }
+        <!-- Remplace les deux @if séparés par cette condition commune -->
+@if (alerte.etatAlerte !== 'IGNOREE' && alerte.etatAlerte !== 'TRAITEE') {
+  <button (click)="ignorerAlerte(alerte.id)" class="btn-ignorer">
+    Ignorer
+  </button>
 
-        @if (alerte.etatAlerte !== 'IGNOREE') {
-    <button (click)="demanderEchantillon(alerte)" class="btn-echantillon">
-      Demande échantillon
-    </button>
-  }
+  <button (click)="demanderEchantillon(alerte)" class="btn-echantillon">
+    Demande échantillon
+  </button>
+}
+  
       </td>
     </tr>
   } @empty {

@@ -3,12 +3,25 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Delete;
 use App\Repository\DistribueRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DistribueRepository::class)]
 #[ORM\UniqueConstraint(name: 'unique_dist_mp', columns:['distribution_id','mp_id'])]
-#[ApiResource()]
+#[ApiResource(
+    operations: [
+            new GetCollection(),
+            new Get(),
+            new Post(),
+            new Patch(),
+            new Delete(),
+        ]
+)]
 class Distribue
 {
     #[ORM\Id]
