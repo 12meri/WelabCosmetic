@@ -1,0 +1,94 @@
+<div class="demande-container">
+  <h2>Demande d’échantillon</h2>
+
+  <form (ngSubmit)="createDemande()" #demandeForm="ngForm">
+
+    <div class="form-group">
+      <label for="mp">MP</label>
+      <select
+  id="mp"
+  class="form-control"
+  name="mp"
+  [(ngModel)]="demande.mp"
+  (change)="loadFournisseursByMp(demande.mp)"
+  required
+>
+        <option value="">-- Choisir une matière première --</option>
+        <option *ngFor="let mp of matieresPremieres" [value]="getMpIri(mp)">
+          {{ mp.nomMP }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+  <label for="fournisseur">Fournisseur</label>
+  <select
+    id="fournisseur"
+    class="form-control"
+    name="fournisseur"
+    [(ngModel)]="demande.fournisseur"
+    required
+  >
+    <option value="">-- Choisir un fournisseur --</option>
+    <option *ngFor="let f of fournisseurs" [value]="getFournisseurIri(f)">
+      {{ f.nomEntr }}
+    </option>
+  </select>
+</div>
+
+    <div class="form-group">
+      <label for="dateDemande">Date demande</label>
+      <input
+        id="dateDemande"
+        class="form-control"
+        type="date"
+        name="dateDemande"
+        [(ngModel)]="demande.dateDemande"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="delaiLivraison">Délai livraison</label>
+      <input
+        id="delaiLivraison"
+        class="form-control"
+        type="date"
+        name="delaiLivraison"
+        [(ngModel)]="demande.delaiLivraison"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="etat">État</label>
+      <select
+        id="etat"
+        class="form-control"
+        name="etat"
+        [(ngModel)]="demande.etat"
+      >
+        <option value="EN_COURS">EN_COURS</option>
+        <option value="ENVOYE">ENVOYE</option>
+        <option value="RECU">RECU</option>
+        <option value="REFUSE">REFUSE</option>
+      </select>
+    </div>
+
+    <div *ngIf="successMessage" class="alert success">
+      {{ successMessage }}
+    </div>
+
+    <div *ngIf="errorMessage" class="alert error">
+      {{ errorMessage }}
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-submit" [disabled]="isLoading">
+        {{ isLoading ? 'Création...' : 'Commander échantillon' }}
+      </button>
+
+      <button type="button" class="btn-cancel" (click)="cancel()">
+        Annuler
+      </button>
+    </div>
+  </form>
+</div>

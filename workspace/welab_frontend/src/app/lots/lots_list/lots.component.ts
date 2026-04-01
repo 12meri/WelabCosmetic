@@ -3,7 +3,9 @@ import { Observable } from 'rxjs';
 import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { LotService } from '../../services/lots.service';
+import { MatpremService } from '../../services/matiere-premiere.service';
 import { Lot } from '../../models/lots.model';
+import { MatierePremiere } from '../../models/matiere-premiere.model';
 
 @Component({
   selector: 'app-lots',
@@ -15,19 +17,48 @@ import { Lot } from '../../models/lots.model';
 export class LotsComponent implements OnInit {
 
   lots$!: Observable<Array<Lot>>;
+  matieresPremieres: MatierePremiere[] = [];
+
   showDeleteModal = false;
   selectedLotId: number | null = null;
   successMessage = '';
   errorMessage = '';
 
-  constructor(private lotService: LotService) {}
+  constructor(
+    private lotService: LotService,
+    private mpservice: MatpremService
+  ) {}
 
   ngOnInit(): void {
     this.loadLots();
+    this.loadMatieresPremieres();
   }
 
   loadLots(): void {
     this.lots$ = this.lotService.lotList();
+  }
+
+  loadMatieresPremieres(): void {
+    this.mpservice.mplist().subscribe({
+      next: (data) => {
+        this.matieresPremieres = data;
+        console.log('Matières premières chargées :', data);
+      },
+      error: (error) => {
+        console.error('Erreur chargement matières premières :', error);
+      }
+    });
+  }
+
+  getMpName(mpIri: string | undefined): string {
+    if (!mpIri) {
+      return '';
+    }
+
+    const id = mpIri.split('/').pop();
+    const mp = this.matieresPremieres.find(m => String(m.id) === id);
+
+    return mp ? mp.nomMP : mpIri;
   }
 
   openDeleteModal(id: number): void {
