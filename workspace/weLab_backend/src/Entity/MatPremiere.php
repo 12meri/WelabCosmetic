@@ -3,42 +3,63 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Delete;
 use App\Repository\MatPremiereRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: MatPremiereRepository::class)]
-#[ApiResource()]
+#[ApiResource(
+    operations: [
+        new GetCollection(),
+        new Get(),
+        new Post(),
+        new Patch(),
+        new Delete(),
+    ]
+)]
 class MatPremiere
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['matiere_premiere:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 200)]
+    #[Groups(['matiere_premiere:read'])]
     private ?string $nomMP = null;
 
     #[ORM\Column(length: 200, nullable: true)]
+    #[Groups(['matiere_premiere:read'])]
     private ?string $INCI = null;
 
     #[ORM\Column(length: 60, nullable: true)]
+    #[Groups(['matiere_premiere:read'])]
     private ?string $NOI = null;
 
     #[ORM\Column(length: 80, nullable: true)]
+    #[Groups(['matiere_premiere:read'])]
     private ?string $categorie = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['matiere_premiere:read'])]
     private ?string $fonction = null;
 
     #[ORM\Column(length: 10, nullable: true)]
+    #[Groups(['matiere_premiere:read'])]
     private ?string $cosmos = null;
 
     /**
      * @var Collection<int, Fournir>
      */
-    #[ORM\OneToMany(targetEntity: Fournir::class, mappedBy: 'MatPrem')]
+    #[ORM\OneToMany(targetEntity: Fournir::class, mappedBy: 'matPrem')]
     private Collection $fournirs;
 
     /**
@@ -58,9 +79,6 @@ class MatPremiere
      */
     #[ORM\OneToMany(targetEntity: DemandeEchantillon::class, mappedBy: 'mp')]
     private Collection $demandeEchantillons;
-
-
-
 
     public function __construct()
     {
@@ -83,7 +101,6 @@ class MatPremiere
     public function setNomMP(string $nomMP): static
     {
         $this->nomMP = $nomMP;
-
         return $this;
     }
 
@@ -95,7 +112,6 @@ class MatPremiere
     public function setINCI(?string $INCI): static
     {
         $this->INCI = $INCI;
-
         return $this;
     }
 
@@ -107,7 +123,6 @@ class MatPremiere
     public function setNOI(?string $NOI): static
     {
         $this->NOI = $NOI;
-
         return $this;
     }
 
@@ -119,7 +134,6 @@ class MatPremiere
     public function setCategorie(?string $categorie): static
     {
         $this->categorie = $categorie;
-
         return $this;
     }
 
@@ -131,7 +145,6 @@ class MatPremiere
     public function setFonction(?string $fonction): static
     {
         $this->fonction = $fonction;
-
         return $this;
     }
 
@@ -143,7 +156,6 @@ class MatPremiere
     public function setCosmos(?string $cosmos): static
     {
         $this->cosmos = $cosmos;
-
         return $this;
     }
 
@@ -161,19 +173,16 @@ class MatPremiere
             $this->fournirs->add($fournir);
             $fournir->setMatPrem($this);
         }
-
         return $this;
     }
 
     public function removeFournir(Fournir $fournir): static
     {
         if ($this->fournirs->removeElement($fournir)) {
-            // set the owning side to null (unless already changed)
             if ($fournir->getMatPrem() === $this) {
                 $fournir->setMatPrem(null);
             }
         }
-
         return $this;
     }
 
@@ -191,21 +200,19 @@ class MatPremiere
             $this->distribues->add($distribue);
             $distribue->setMp($this);
         }
-
         return $this;
     }
 
     public function removeDistribue(Distribue $distribue): static
     {
         if ($this->distribues->removeElement($distribue)) {
-            // set the owning side to null (unless already changed)
             if ($distribue->getMp() === $this) {
                 $distribue->setMp(null);
             }
         }
-
         return $this;
     }
+
     /**
      * @return Collection<int, Lot>
      */
@@ -247,20 +254,16 @@ class MatPremiere
             $this->demandeEchantillons->add($demandeEchantillon);
             $demandeEchantillon->setMp($this);
         }
-
         return $this;
     }
 
     public function removeDemandeEchantillon(DemandeEchantillon $demandeEchantillon): static
     {
         if ($this->demandeEchantillons->removeElement($demandeEchantillon)) {
-            // set the owning side to null (unless already changed)
             if ($demandeEchantillon->getMp() === $this) {
                 $demandeEchantillon->setMp(null);
             }
         }
-
         return $this;
     }
-
 }

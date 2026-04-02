@@ -3,6 +3,11 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Delete;
 use App\Repository\LotRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,7 +16,15 @@ use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: LotRepository::class)]
 #[ORM\UniqueConstraint(name:'unique_num_lot',columns:['num_lot'])] # numero de lot unique
-#[ApiResource()]
+#[ApiResource(
+     operations: [
+        new GetCollection(),
+        new Get(),
+        new Post(),
+        new Patch(),
+        new Delete(),
+    ]
+)]
 class Lot
 {
     #[ORM\Id]

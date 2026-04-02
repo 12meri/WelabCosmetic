@@ -1,0 +1,110 @@
+<div class="mp-edit-container">
+  <h2>Modifier une matière première</h2>
+
+  <!-- message succès -->
+  <div *ngIf="successMessage" class="alert success">
+    {{ successMessage }}
+  </div>
+
+  <!-- message erreur -->
+  <div *ngIf="errorMessage" class="alert error">
+    {{ errorMessage }}
+  </div>
+
+  <!-- formulaire -->
+  <form (ngSubmit)="updateMp()" #mpForm="ngForm">
+
+    <!-- nom -->
+    <div class="form-group">
+      <label for="nomMP">Nom MP</label>
+      <input
+        type="text"
+        id="nomMP"
+        name="nomMP"
+        [(ngModel)]="mp.nomMP"
+        class="form-control"
+        required
+      />
+    </div>
+
+    <!-- INCI -->
+    <div class="form-group">
+      <label for="INCI">INCI</label>
+      <input
+        type="text"
+        id="INCI"
+        name="INCI"
+        [(ngModel)]="mp.INCI"
+        class="form-control"
+      />
+    </div>
+
+    <!-- NOI -->
+    <div class="form-group">
+      <label for="NOI">NOI</label>
+      <input
+        type="text"
+        id="NOI"
+        name="NOI"
+        [(ngModel)]="mp.NOI"
+        class="form-control"
+      />
+    </div>
+
+    <!-- catégorie -->
+    <div class="form-group">
+      <label for="categorie">Catégorie</label>
+      <input
+        type="text"
+        id="categorie"
+        name="categorie"
+        [(ngModel)]="mp.categorie"
+        class="form-control"
+      />
+    </div>
+
+    <!-- fonction -->
+    <div class="form-group">
+      <label for="fonction">Fonction</label>
+      <input
+        type="text"
+        id="fonction"
+        name="fonction"
+        [(ngModel)]="mp.fonction"
+        class="form-control"
+      />
+    </div>
+
+    <!-- cosmos -->
+    <div class="form-group">
+      <label for="cosmos">Cosmos</label>
+      <input
+        type="text"
+        id="cosmos"
+        name="cosmos"
+        [(ngModel)]="mp.cosmos"
+        class="form-control"
+      />
+    </div>
+
+    <!-- boutons -->
+    <div class="form-actions">
+
+      <button
+        type="submit"
+        class="btn-update"
+        [disabled]="isLoading || mpForm.invalid">
+        {{ isLoading ? 'Modification...' : 'Modifier' }}
+      </button>
+
+      <button
+        type="button"
+        class="btn-cancel"
+        (click)="cancel()">
+        Annuler
+      </button>
+
+    </div>
+
+  </form>
+</div>

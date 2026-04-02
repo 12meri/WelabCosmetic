@@ -3,6 +3,11 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Delete;
 use App\Repository\FournirRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,7 +16,15 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\UniqueConstraint(name: 'unique_prix_mp_four_dist', 
 columns:['mat_prem_id','fournisseur_id','distribution_id'])]
 # pour avoir une instance de prix par marque 
-#[ApiResource()]
+#[ApiResource(
+        operations: [
+            new GetCollection(),
+            new Get(),
+            new Post(),
+            new Patch(),
+            new Delete(),
+        ]
+)]
 class Fournir
 {
     #[ORM\Id]

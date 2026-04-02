@@ -1,0 +1,33 @@
+<div class="login-page">
+  <header class="topbar">
+    <div class="brand">WelabCosmetic</div>
+  </header>
+
+  <main class="hero">
+    <div class="overlay">
+      <section class="login-card">
+        <h1>se connecter</h1>
+        <a href="/matieres-premieres">go to matieres premieres</a>
+
+        <form (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="username">nom utilisateur</label>
+            <input id="username" name="username" type="text" [(ngModel)]="username" />
+          </div>
+
+          <div class="form-group">
+            <label for="password">mot de passe</label>
+            <input id="password" name="password" type="password" [(ngModel)]="password" />
+          </div>
+
+          <button type="submit">se connecter</button>
+        </form>
+
+        <div class="links">
+          <a href="#">mot de passe oublié?</a>
+          <a href="#">pas de compte? créer un compte</a>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>

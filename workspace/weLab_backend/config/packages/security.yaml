@@ -2,16 +2,45 @@ security:
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+        # App\Entity\User:
+        #     algorithm: auto
+        #     # https://symfony.com/doc/current/security.html#caching-the-user-salt
+        #     # If you are using bcrypt or argon2i, you don't need to define a "salt" option.
+        #     # The "salt" option is not used for modern algorithms such as bcrypt and argon2i.
+        #     # If you are using a different algorithm, you should define a "salt" option to ensure that the password hashes are unique and secure.
+        #     # salt: 'your_salt_value_here' # Replace with your actual salt value
 
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         users_in_memory: { memory: null }
+        # app_user_provider:
+        #     entity:
+        #         class: App\Entity\User
+        #         property: email
+
 
     firewalls:
         dev:
             # Ensure dev tools and static assets are always allowed
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
+
+        # a decommenter apres la mise en place de JWT pour sécuriser les endpoints de l'API
+        # login:
+        #     pattern: ^/api/login 
+        #     stateless: true 
+        #     json_login:
+        #         check_path: /api/login_check # This should match the route defined in your application for handling login requests
+        #         username_path: email
+        #         password_path: password
+        #         success_handler: lexik_jwt_authentication.handler.authentication_success 
+        #         failure_handler: lexik_jwt_authentication.handler.authentication_failure  
+        # api:
+        #     pattern: ^/api
+        #     stateless: true
+        #     jwt: ~ # This will use the default configuration defined in lexik_jwt_authentication.yaml
+
+        
         main:
             lazy: true
             provider: users_in_memory
@@ -26,6 +55,11 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        # a decommenter apres la mise en place de JWT pour sécuriser les endpoints de l'API
+        # -{path: ^/api/login, roles: PUBLIC_ACCESS} # Allow unauthenticated access to the login endpoint
+        # -{path: ^/api/docs, roles: PUBLIC_ACCESS} # Allow unauthenticated access to API documentation (if you have any)
+        # -{path: ^/api/admin, roles: ROLE_ADMIN} # Restrict access to admin endpoints to users with ROLE_ADMIN
+        # -{path: ^/api, roles: IS_AUTHENTICATED_FULLY} # Ensure that all API endpoints require authentication
 
 when@test:
     security:

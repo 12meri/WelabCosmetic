@@ -3,6 +3,11 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Delete;
 use App\Repository\AlerteRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
@@ -10,7 +15,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: AlerteRepository::class)]
-#[ApiResource()]
+#[ApiResource(
+     operations: [
+        new GetCollection(),
+        new Get(),
+        new Post(),
+        new Patch(),
+        new Delete(),
+    ]
+)]
 class Alerte
 {
     // const TYPE_STOCK_BAS = 'STOCK_BAS';
