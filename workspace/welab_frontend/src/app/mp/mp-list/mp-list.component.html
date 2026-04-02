@@ -1,0 +1,60 @@
+<h1>Matieres premieres</h1>
+
+<a routerLink="add" class="btn-add">Ajouter</a>
+
+@if (successMessage) {
+  <div class="alert success">
+    {{ successMessage }}
+  </div>
+}
+
+@if (errorMessage) {
+  <div class="alert error">
+    {{ errorMessage }}
+  </div>
+}
+
+<table>
+  @for (mp of mp$ | async; track trackById($index ,mp)) {
+    <tr>
+      <td>{{ mp.id }}</td>
+      <td>{{ mp.nomMP }}</td>
+      <td>{{ mp.INCI }}</td>
+      <td>{{ mp.NOI }}</td>
+      <td>{{ mp.categorie }}</td>
+      <td>{{ mp.cosmos }}</td>
+      <td>{{ mp.fonction }}</td>
+      <td>
+        @if (mp.id) {
+          <button (click)="openDeleteModal(mp.id)" class="btn-delete">
+            Supprimer
+          </button>
+          <a [routerLink]="['/matpremieres/edit', mp.id]" class="btn-update">
+            Modifier
+          </a>
+        }
+      </td>
+    </tr>
+  } @empty {
+    <tr>
+      <td colspan="8" class="empty">Aucune matiere premiere trouvée</td>
+    </tr>
+  }
+</table>
+
+@if (showDeleteModal) {
+  <div class="modal-backdrop">
+    <div class="modal-box">
+      <h3>Confirmer la suppression</h3>
+      <p>Voulez-vous vraiment supprimer cette matière première ?</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="closeDeleteModal()">
+          Annuler
+        </button>
+        <button class="btn-delete" (click)="confirmDelete()">
+          Supprimer
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -26,8 +26,8 @@
     {
       "path": "./tsconfig.app.json"
     },
-    {
-      "path": "./tsconfig.spec.json"
-    }
+    // {// cest pour les tests, on peut le faire plus tard
+    //   "path": "./tsconfig.spec.json"
+    // }
   ]
 }

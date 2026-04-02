@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 import { DemandeEchantillonService } from '../../services/demande-echantillon.service';
@@ -12,7 +12,7 @@ import { MatierePremiere } from '../../models/matiere-premiere.model';
 @Component({
   selector: 'app-demande-echantillon-add',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule],
   templateUrl: './demande-echantillon-add.html',
   styleUrls: ['./demande-echantillon-add.css'],
 })

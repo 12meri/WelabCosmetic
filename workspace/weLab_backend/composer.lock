@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5deeb97e63d863cf74c5d717356eaa2d",
+    "content-hash": "b9e4543d2efef1224241e264d0eb3206",
     "packages": [
         {
             "name": "api-platform/doctrine-common",
@@ -5622,16 +5622,16 @@
         },
         {
             "name": "symfony/security-bundle",
-            "version": "v8.0.6",
+            "version": "v8.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/security-bundle.git",
-                "reference": "73ba33c215a5e4516c7045c26f6fec71e4ab5727"
+                "reference": "00a13be2abf3fe9baf54e1e16e7583ca9c708f09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/security-bundle/zipball/73ba33c215a5e4516c7045c26f6fec71e4ab5727",
-                "reference": "73ba33c215a5e4516c7045c26f6fec71e4ab5727",
+                "url": "https://api.github.com/repos/symfony/security-bundle/zipball/00a13be2abf3fe9baf54e1e16e7583ca9c708f09",
+                "reference": "00a13be2abf3fe9baf54e1e16e7583ca9c708f09",
                 "shasum": ""
             },
             "require": {
@@ -5698,7 +5698,7 @@
             "description": "Provides a tight integration of the Security component into the Symfony full-stack framework",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/security-bundle/tree/v8.0.6"
+                "source": "https://github.com/symfony/security-bundle/tree/v8.0.8"
             },
             "funding": [
                 {
@@ -5718,7 +5718,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-02-22T22:01:53+00:00"
+            "time": "2026-03-30T15:14:47+00:00"
         },
         {
             "name": "symfony/security-core",

@@ -94,6 +94,7 @@ cd welab_frontend
   ng serve --host 0.0.0.0 &
 ou ouvrir un autre terminal et lancer ca 
   ng serve --host 0.0.0.0 et le laissser ouvert
+  ng serve --host 0.0.0.0 --port 4200 --poll=2000  // pour le devellopement
 
 puis on a acces sur localhost:8021
 
