@@ -1,0 +1,50 @@
+<div class="distribution-edit-container">
+  <h2>Modifier une distribution</h2>
+
+  @if (successMessage) {
+    <div class="alert success">{{ successMessage }}</div>
+  }
+
+  @if (errorMessage) {
+    <div class="alert error">{{ errorMessage }}</div>
+  }
+
+  <form (ngSubmit)="update()" #distributionForm="ngForm">
+
+    <div class="form-group">
+      <label for="nomMarque">Nom de marque *</label>
+      <input
+        type="text"
+        id="nomMarque"
+        name="nomMarque"
+        [(ngModel)]="distribution.nomMarque"
+        required
+        class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="fournisseur">Fournisseur *</label>
+      <select
+        id="fournisseur"
+        name="fournisseur"
+        [(ngModel)]="distribution.fournisseur"
+        required
+        class="form-control">
+        <option value="">-- Choisir un fournisseur --</option>
+        @for (f of fournisseurs; track f.id) {
+          <option [value]="getFournisseurIri(f)">{{ f.nomEntr }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="isLoading || distributionForm.invalid" class="btn-update">
+        {{ isLoading ? 'Modification...' : 'Modifier' }}
+      </button>
+      <button type="button" (click)="cancel()" class="btn-cancel">
+        Annuler
+      </button>
+    </div>
+
+  </form>
+</div>

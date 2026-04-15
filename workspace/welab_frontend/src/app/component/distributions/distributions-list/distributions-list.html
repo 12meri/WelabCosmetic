@@ -1,0 +1,62 @@
+<h1>Distributions</h1>
+
+<a routerLink="add" class="btn-add">Ajouter</a>
+
+@if (successMessage) {
+  <div class="alert success">{{ successMessage }}</div>
+}
+
+@if (errorMessage) {
+  <div class="alert error">{{ errorMessage }}</div>
+}
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nom de marque</th>
+      <th>Fournisseur</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (d of distributions$ | async; track trackById($index, d)) {
+      <tr>
+        <td>{{ d.id }}</td>
+        <td>{{ d.nomMarque }}</td>
+        <td>{{ getFournisseurName(d.fournisseur) }}</td>
+        <td>
+          @if (d.id) {
+            <button (click)="openDeleteModal(d.id)" class="btn-delete">
+              Supprimer
+            </button>
+            <a [routerLink]="['/distributions/edit', d.id]" class="btn-update">
+              Modifier
+            </a>
+          }
+        </td>
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="4" class="empty">Aucune distribution trouvée</td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+@if (showDeleteModal) {
+  <div class="modal-backdrop">
+    <div class="modal-box">
+      <h3>Confirmer la suppression</h3>
+      <p>Voulez-vous vraiment supprimer cette distribution ?</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="closeDeleteModal()">
+          Annuler
+        </button>
+        <button class="btn-delete" (click)="confirmDelete()">
+          Supprimer
+        </button>
+      </div>
+    </div>
+  </div>
+}
