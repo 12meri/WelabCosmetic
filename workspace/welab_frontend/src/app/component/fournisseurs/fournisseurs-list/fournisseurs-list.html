@@ -1,0 +1,58 @@
+<h1>Fournisseurs</h1>
+
+<a routerLink="add" class="btn-add">Ajouter</a>
+
+@if (successMessage) {
+  <div class="alert success">
+    {{ successMessage }}
+  </div>
+}
+
+@if (errorMessage) {
+  <div class="alert error">
+    {{ errorMessage }}
+  </div>
+}
+
+<table>
+  @for (f of fournisseurs$ | async; track trackById($index, f)) {
+    <tr>
+      <td>{{ f.id }}</td>
+      <td>{{ f.nomEntr }}</td>
+      <td>{{ f.adresse }}</td>
+      <td>{{ f.emailGen }}</td>
+      <td>{{ f.telFourni }}</td>
+      <td>
+        @if (f.id) {
+          <button (click)="openDeleteModal(f.id)" class="btn-delete">
+            Supprimer
+          </button>
+          <a [routerLink]="['/fournisseurs/edit', f.id]" class="btn-update">
+            Modifier
+          </a>
+        }
+      </td>
+    </tr>
+  } @empty {
+    <tr>
+      <td colspan="6" class="empty">Aucun fournisseur trouvé</td>
+    </tr>
+  }
+</table>
+
+@if (showDeleteModal) {
+  <div class="modal-backdrop">
+    <div class="modal-box">
+      <h3>Confirmer la suppression</h3>
+      <p>Voulez-vous vraiment supprimer ce fournisseur ?</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="closeDeleteModal()">
+          Annuler
+        </button>
+        <button class="btn-delete" (click)="confirmDelete()">
+          Supprimer
+        </button>
+      </div>
+    </div>
+  </div>
+}

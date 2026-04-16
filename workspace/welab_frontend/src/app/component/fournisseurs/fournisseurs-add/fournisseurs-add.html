@@ -1,0 +1,65 @@
+<div class="fournisseur-add-container">
+  <h2>Ajouter un fournisseur</h2>
+
+  @if (successMessage) {
+    <div class="alert success">{{ successMessage }}</div>
+  }
+
+  @if (errorMessage) {
+    <div class="alert error">{{ errorMessage }}</div>
+  }
+
+  <form (ngSubmit)="create()" #fournisseurForm="ngForm">
+
+    <div class="form-group">
+      <label for="nomEntr">Nom de l'entreprise *</label>
+      <input
+        type="text"
+        id="nomEntr"
+        name="nomEntr"
+        [(ngModel)]="fournisseur.nomEntr"
+        required
+        class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="adresse">Adresse</label>
+      <input
+        type="text"
+        id="adresse"
+        name="adresse"
+        [(ngModel)]="fournisseur.adresse"
+        class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="emailGen">Email général</label>
+      <input
+        type="email"
+        id="emailGen"
+        name="emailGen"
+        [(ngModel)]="fournisseur.emailGen"
+        class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="telFourni">Téléphone</label>
+      <input
+        type="text"
+        id="telFourni"
+        name="telFourni"
+        [(ngModel)]="fournisseur.telFourni"
+        class="form-control">
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="isLoading || !fournisseurForm.valid" class="btn-submit">
+        {{ isLoading ? 'Création en cours...' : 'Créer' }}
+      </button>
+      <button type="button" (click)="cancel()" class="btn-cancel">
+        Annuler
+      </button>
+    </div>
+
+  </form>
+</div>
