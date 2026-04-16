@@ -16,7 +16,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: DistributionRepository::class)]
 #[ApiResource(
     operations: [
-            new GetCollection(),
+            new GetCollection(
+                paginationEnabled: false
+            ),
             new Get(),
             new Post(),
             new Patch(),

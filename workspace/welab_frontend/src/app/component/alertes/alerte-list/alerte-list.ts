@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AlerteService } from '../../services/alerte-service';
-import { Alerte } from '../../models/alerte';
+import { AlerteService } from '../../../services/alerte-service';
+import { Alerte } from '../../../models/alerte';
 import { Router } from '@angular/router';
 
 @Component({

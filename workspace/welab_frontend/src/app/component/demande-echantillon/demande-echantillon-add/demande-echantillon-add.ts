@@ -4,10 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
-import { DemandeEchantillonService } from '../../services/demande-echantillon.service';
-import { MatpremService } from '../../services/matiere-premiere.service';
-import { DemandeEchantillon } from '../../models/demande-echantillon.model';
-import { MatierePremiere } from '../../models/matiere-premiere.model';
+import { DemandeEchantillonService } from '../../../services/demande-echantillon.service';
+import { MatpremService } from '../../../services/matiere-premiere.service';
+import { DemandeEchantillon } from '../../../models/demande-echantillon.model';
+import { MatierePremiere } from '../../../models/matiere-premiere.model';
 
 @Component({
   selector: 'app-demande-echantillon-add',

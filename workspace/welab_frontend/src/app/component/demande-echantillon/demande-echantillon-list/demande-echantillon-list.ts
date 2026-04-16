@@ -3,9 +3,9 @@ import { Observable } from 'rxjs';
 import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
-import { DemandeEchantillonService } from '../../services/demande-echantillon.service';
-import { DemandeEchantillon } from '../../models/demande-echantillon.model';
-import { MatpremService } from '../../services/matiere-premiere.service';
+import { DemandeEchantillonService } from '../../../services/demande-echantillon.service';
+import { DemandeEchantillon } from '../../../models/demande-echantillon.model';
+import { MatpremService } from '../../../services/matiere-premiere.service';
 import { HttpClient } from '@angular/common/http';
 
 @Component({

@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { LotService } from '../../services/lots.service';
-import { MatpremService } from '../../services/matiere-premiere.service';
-import { Lot } from '../../models/lots.model';
-import { MatierePremiere } from '../../models/matiere-premiere.model';
+import { LotService } from '../../../services/lots.service';
+import { MatpremService } from '../../../services/matiere-premiere.service';
+import { Lot } from '../../../models/lots.model';
+import { MatierePremiere } from '../../../models/matiere-premiere.model';
 
 @Component({
   selector: 'app-lots',

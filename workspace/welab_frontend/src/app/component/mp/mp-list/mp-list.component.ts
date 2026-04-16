@@ -5,8 +5,8 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 import { Observable } from 'rxjs';
-import { MatpremService } from '../../services/matiere-premiere.service';
-import { MatierePremiere } from '../../models/matiere-premiere.model';
+import { MatpremService } from '../../../services/matiere-premiere.service';
+import { MatierePremiere } from '../../../models/matiere-premiere.model';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
