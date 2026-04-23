@@ -19,6 +19,9 @@ import { DistributionsEdit } from './component/distributions/distributions-edit/
 import { ContactFournisseursList } from './component/contact-fournisseurs/contact-fournisseurs-list/contact-fournisseurs-list';
 import { ContactFournisseursAdd } from './component/contact-fournisseurs/contact-fournisseurs-add/contact-fournisseurs-add';
 import { ContactFournisseursEdit } from './component/contact-fournisseurs/contact-fournisseurs-edit/contact-fournisseurs-edit';
+import { FournisseurDetailComponent } from './component/fournisseurs/fournisseur-detail/fournisseur-detail.component';
+
+
 export const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'},
   { path: 'home', component: HomeComponent },
@@ -41,4 +44,5 @@ export const routes: Routes = [
   { path: "contact-fournisseurs", component: ContactFournisseursList },
   { path: "contact-fournisseurs/add", component: ContactFournisseursAdd },
   { path: "contact-fournisseurs/edit/:id", component: ContactFournisseursEdit },
+  { path: "fournisseurs/:id", component: FournisseurDetailComponent }
 ];

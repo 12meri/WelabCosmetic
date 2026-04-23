@@ -40,6 +40,18 @@ class Fournir
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Fournisseur $fournisseur = null;
 
+    /**
+     * Marque (distribution) pour laquelle cette fourniture est valable.
+     * 
+     * - NULL : la matière est fournie sans restriction de marque.
+     * - Renseignée : la matière est fournie spécifiquement pour cette marque.
+     * 
+     * Si une distribution est supprimée, les fournitures associées sont supprimées en cascade (onDelete: CASCADE).
+     * 
+     * Un même fournisseur peut vendre la même matière pour différentes marques (ex: huile d'argan pour marque A et marque B),
+     * avec des prix éventuellement différents. La contrainte d'unicité sur (mat_prem, fournisseur, distribution)
+     * empêche d'avoir deux fois la même fourniture pour un triplet identique.
+     */
     #[ORM\ManyToOne(inversedBy: 'fournirs')]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?Distribution $distribution = null;

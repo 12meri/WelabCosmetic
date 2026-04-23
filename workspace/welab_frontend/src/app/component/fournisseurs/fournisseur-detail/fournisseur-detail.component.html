@@ -1,0 +1,61 @@
+<div class="detail-container">
+  <h2>Détail fournisseur</h2>
+
+  @if (fournisseur) {
+    <div class="info-card">
+      <p><strong>Nom :</strong> {{ fournisseur.nomEntr }}</p>
+      <p><strong>Adresse :</strong> {{ fournisseur.adresse }}</p>
+      <p><strong>Email :</strong> {{ fournisseur.emailGen }}</p>
+      <p><strong>Téléphone :</strong> {{ fournisseur.telFourni }}</p>
+    </div>
+
+    <div class="actions-bar">
+      <button class="btn-primary" (click)="openAddFournir()">➕ Ajouter une matière première</button>
+      <button class="btn-secondary" routerLink="/distributions/add">🏷️ Ajouter une distribution</button>
+      <!-- <button class="btn-secondary" routerLink="/contact-fournisseurs/add/{{ fournisseur.id }}">📇 Ajouter un contact</button> -->
+    </div>
+
+    <h3>Matières premières fournies</h3>
+    <table class="table">
+      <thead>
+        <tr><th>Matière première</th><th>Distribution (marque)</th><th>Prix (€)</th><th>MOQ</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        @for (f of fournitures; track f.id) {
+          <tr>
+            <td>{{ getMatPremNom(f.matPrem) }}</td>
+            <td>{{ getDistribNom(f.distribution) }}</td>
+            <td>{{ f.prix }}</td>
+            <td>{{ f.moq }}</td>
+            <td>
+              <!-- <button (click)="openEditFournir(f)" class="btn-edit">✏️</button>
+              <button (click)="deleteFournir(f.id!)" class="btn-delete">🗑️</button> -->
+
+            </td>
+          </tr>
+        } @empty {
+          <tr><td colspan="5">Aucune matière première associée</td></tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  <!-- Modal ajout/modification Fournir (simplifié) -->
+  <!-- @if (showModalFournir) {
+    <app-modal-fournir
+      [fournisseurId]="fournisseur.id" 
+      [matieres]="matieres"
+      [distributions]="distributions"
+      (saved)="onFournirSaved()"
+      (closed)="showModalFournir = false">
+    </app-modal-fournir>
+  }
+
+  @if (showModalEditFournir && selectedFournir) {
+    <app-modal-edit-fournir
+      [fournir]="selectedFournir"
+      (saved)="onFournirSaved()"
+      (closed)="showModalEditFournir = false">
+    </app-modal-edit-fournir>
+  } -->
+</div>

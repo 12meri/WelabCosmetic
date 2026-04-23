@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatpremService } from '../../../services/matiere-premiere.service';
 import { MatierePremiere } from '../../../models/matiere-premiere.model';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-mp-edit',
@@ -30,7 +31,9 @@ export class MpEdit implements OnInit {
 
   constructor(
     private matpremService: MatpremService,
+    private notificationService: NotificationService, 
     private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef,
     private router: Router
   ) {}
 
@@ -39,10 +42,15 @@ export class MpEdit implements OnInit {
 
     if (idParam) {
       this.id = Number(idParam);
-      this.loadMp();
+      this.loadMp();      
     } else {
       this.errorMessage = '❌ ID introuvable';
     }
+  }
+
+  // Appelle la méthode publique du service – pas de redondance
+  getCategorieFromNom(): string {
+    return this.matpremService.getCategorieFromNom(this.mp.nomMP);
   }
 
   loadMp(): void {
@@ -51,10 +59,11 @@ export class MpEdit implements OnInit {
       next: (data) => {
         this.mp = data;
         this.isLoading = false;
+        this.cdr.markForCheck();
       },
       error: (error) => {
         console.error('Erreur chargement :', error);
-        this.errorMessage = '❌ Erreur lors du chargement';
+        this.errorMessage = 'Erreur lors du chargement';
         this.isLoading = false;
       }
     });
@@ -68,16 +77,14 @@ export class MpEdit implements OnInit {
     this.matpremService.updateMp(this.id, this.mp).subscribe({
       next: (success) => {
         if (success) {
-          this.successMessage = '✅ Matière première modifiée avec succès !';
-          setTimeout(() => {
-            this.router.navigate(['/matpremieres']);
-          }, 2000);
+          this.notificationService.showMessage(' Matière première modifiée avec succès !');
+        this.router.navigate(['/matpremieres']);
         }
         this.isLoading = false;
       },
       error: (error) => {
         console.error('Erreur modification :', error);
-        this.errorMessage = '❌ Erreur lors de la modification';
+        this.errorMessage = ' Erreur lors de la modification';
         this.isLoading = false;
       }
     });

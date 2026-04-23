@@ -21,7 +21,7 @@ class LotFixtures extends Fixture implements DependentFixtureInterface
 
     $lots=[
         [
-                'mp_ref' => 'mp_0',           // Huile d'Argan
+                'mp_ref' => 'mp_0',           // Darquench IQ SA MBAL-PA-(RB)
                 'numLot' => 'HA-2024-001',
                 'dateArrivee' => new DateTime('2024-01-15'),
                 'ddm' => new DateTime('2026-01-15'),
@@ -32,7 +32,7 @@ class LotFixtures extends Fixture implements DependentFixtureInterface
                 'demande_ref' => null
             ],
             [
-                'mp_ref' => 'mp_0',
+                'mp_ref' => 'mp_0', // Darquench IQ SA MBAL-PA-(RB)
                 'numLot' => 'HA-2024-002',
                 'dateArrivee' => new DateTime('2024-06-20'),
                 'ddm' => new DateTime('2026-06-20'),
@@ -43,7 +43,7 @@ class LotFixtures extends Fixture implements DependentFixtureInterface
                 'demande_ref' => null
             ],
             [
-                'mp_ref' => 'mp_1',           // Beurre de Karité
+                'mp_ref' => 'mp_1',           // 1,2-Propylene Glycol care
                 'numLot' => 'BK-2024-001',
                 'dateArrivee' => new DateTime('2024-02-10'),
                 'ddm' => new DateTime('2025-08-10'),
@@ -103,7 +103,7 @@ class LotFixtures extends Fixture implements DependentFixtureInterface
         $lot->setEtat($data['etat']);
         $lot->setDateMaj($data['dateArrivee']);
 
-        #pour demandechantillon
+        // pour demandechantillon si existe
         if (isset($data['demande_ref']) && $data['demande_ref']) {
                 $demande = $this->getReference($data['demande_ref'], DemandeEchantillon::class);
                 $lot->setDemandeEchantillon($demande);
@@ -116,10 +116,10 @@ class LotFixtures extends Fixture implements DependentFixtureInterface
 
         $manager->flush();
     }
-    public function getDependencies(): array
+    public function getDependencies(): array // cette méthode est requise par l'interface DependentFixtureInterface et doit retourner un tableau des classes de fixtures dont cette fixture dépend, c'est-à-dire les fixtures qui doivent être chargées avant celle-ci pour que les références utilisées dans cette fixture soient disponibles
     {
         return [
-            MatpremieresFixtures::class,
+            MatpremieresFixtures::class, // on dépend des fixtures des matières premières car les lots doivent être associés à des matières premières qui doivent déjà exister en base de données pour que les références fonctionnent, sinon on aurait une erreur de référence non trouvée lors du chargement des fixtures des lots
             //DemandeEchantillonFixtures::class,
         ];
     }

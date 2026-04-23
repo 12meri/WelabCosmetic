@@ -12,13 +12,9 @@ export class LotService {
 
   private url: string = 'http://localhost:8011/api/lots';
 
-  private headers = new HttpHeaders({
-    'Content-Type': 'application/ld+json'
-  });
+  private headers = new HttpHeaders({'Content-Type': 'application/ld+json'});
 
-  private patchHeaders = new HttpHeaders({
-    'Content-Type': 'application/merge-patch+json'
-  });
+  private patchHeaders = new HttpHeaders({'Content-Type': 'application/merge-patch+json'});
 
   constructor(private http: HttpClient) {}
 
@@ -37,15 +33,16 @@ export class LotService {
     return this.http.get<Lot>(`${this.url}/${id}`);
   }
 
-  // AJOUT LOT 
+  // Ajouter un lot 
   createLot(lot: Lot): Observable<boolean> {
     const lotToSend: any = {
-      numLot: lot.numLot,
+      numLot: lot.numLot, // est unique
       qtInitiale: String(lot.qtInitiale), // 🔥 IMPORTANT
       etat: lot.etat || 'OK',
-      mp: lot.mp
+      mp: lot.mp // peut pas etre null
     };
 
+    // 
     if (lot.dateArrivee) {
       lotToSend.dateArrivee = lot.dateArrivee;
     }
@@ -69,6 +66,8 @@ export class LotService {
     if (lot.demandeEchantillon) {
       lotToSend.demandeEchantillon = lot.demandeEchantillon;
     }
+
+    // TODO: Ajouter champs document
 
     console.log('Payload envoyé :', lotToSend);
 
@@ -83,7 +82,7 @@ export class LotService {
     );
   }
 
-  // MODIFIER LOT 
+  // Mettre à jour un lot
   updateLot(id: number, lot: Lot): Observable<boolean> {
     const lotToSend: any = {
       numLot: lot.numLot,
@@ -92,6 +91,8 @@ export class LotService {
       mp: lot.mp
     };
 
+
+    // Seuls les champs présents dans lotToSend seront mis à jour, les autres resteront inchangés
     if (lot.dateArrivee) {
       lotToSend.dateArrivee = lot.dateArrivee;
     }
@@ -116,6 +117,8 @@ export class LotService {
       lotToSend.demandeEchantillon = lot.demandeEchantillon;
     }
 
+    // TODO: Ajouter champs document
+
     return this.http.patch(`${this.url}/${id}`, lotToSend, {
       headers: this.patchHeaders,
       observe: 'response'
@@ -124,7 +127,7 @@ export class LotService {
     );
   }
 
-  // SUPPRIMER LOT
+  // Supprimer un lot
   deleteLot(id: number): Observable<boolean> {
     return this.http.delete(`${this.url}/${id}`, {
       observe: 'response'

@@ -15,6 +15,7 @@ export class DistributionService {
 
   constructor(private http: HttpClient) {}
 
+  
   list(): Observable<Distribution[]> {
     return this.http
       .get<ApiResponse<Distribution>>(`${this.url}?pagination=false`, { observe: 'body', responseType: 'json' })

@@ -38,7 +38,7 @@ export class FournisseursAdd {
     this.fournisseurService.create(this.fournisseur).subscribe({
       next: (success) => {
         if (success) {
-          this.successMessage = '✅ Fournisseur créé avec succès !';
+          this.successMessage = ' Fournisseur créé avec succès !';
           this.resetForm();
           setTimeout(() => {
             this.router.navigate(['/fournisseurs']);
@@ -48,7 +48,7 @@ export class FournisseursAdd {
       },
       error: (error) => {
         console.error('Erreur:', error);
-        this.errorMessage = '❌ Erreur lors de la création';
+        this.errorMessage = ' Erreur lors de la création';
         this.isLoading = false;
       }
     });

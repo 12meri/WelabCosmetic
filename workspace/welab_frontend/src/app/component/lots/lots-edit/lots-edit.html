@@ -85,7 +85,7 @@
       />
     </div>
 
-    <div class="form-group">
+    <!-- <div class="form-group">
       <label for="etat">État</label>
       <select
         id="etat"
@@ -97,7 +97,7 @@
         <option value="ALERTE">ALERTE</option>
         <option value="EPUISE">EPUISE</option>
       </select>
-    </div>
+    </div> -->
 
     <div class="form-group">
       <label for="mp">Matière première</label>
@@ -109,19 +109,25 @@
         required
       >
         <option value="">-- Choisir une matière première --</option>
-        <option *ngFor="let mp of matieresPremieres" [value]="getMpIri(mp)">
-          {{ mp.nomMP }}
-        </option>
+        @for (mp of matieresPremieres; track getMpIri(mp)) {
+          <option [value]="getMpIri(mp)">
+            {{ mp.nomMP }}
+          </option>
+        }
       </select>
     </div>
 
-    <div *ngIf="successMessage" class="alert success">
-      {{ successMessage }}
-    </div>
+    @if (successMessage) {
+      <div class="alert success">
+        {{ successMessage }}
+      </div>
+    }
 
-    <div *ngIf="errorMessage" class="alert error">
-      {{ errorMessage }}
-    </div>
+    @if (errorMessage) {
+      <div class="alert error">
+        {{ errorMessage }}
+      </div>
+    }
 
     <div class="form-actions">
       <button type="submit" class="btn-submit" [disabled]="isLoading">

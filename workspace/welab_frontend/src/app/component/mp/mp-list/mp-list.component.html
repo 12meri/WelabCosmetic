@@ -15,6 +15,18 @@
 }
 
 <table>
+  <thead>
+        <tr>
+          <th>ID</th>
+          <th>NOM MATIERE</th>
+          <th>INCI</th>
+          <th>NOI</th>
+          <th>CATEGORIE</th>
+          <th>COSMOS</th>
+          <th>FONCTION</th>
+          <th>ACTIONS</th>
+        </tr>
+      </thead>
   @for (mp of mp$ | async; track trackById($index ,mp)) {
     <tr>
       <td>{{ mp.id }}</td>
@@ -40,6 +52,7 @@
       <td colspan="8" class="empty">Aucune matiere premiere trouvée</td>
     </tr>
   }
+  <!-- TODO LES FILES ASSOCIES -->
 </table>
 
 @if (showDeleteModal) {

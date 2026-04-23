@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -21,8 +21,8 @@ export class LotAdd implements OnInit {
     dateArrivee: '',
     ddm: '',
     qtInitiale: '',
-    qtRestante: '',
-    dateMaj: '',
+    qtRestante: '', // par défaut qtRestante = qtInitiale
+    dateMaj: '', // par défaut dateMaj = dateArrivee
     qtMin: '',
     etat: 'OK',
     mp: ''
@@ -38,6 +38,7 @@ export class LotAdd implements OnInit {
   constructor(
     private lotService: LotService,
     private mpService: MatpremService,
+    private cdr: ChangeDetectorRef,
     private router: Router
   ) {}
 
@@ -53,10 +54,11 @@ export class LotAdd implements OnInit {
         console.log('Matières premières reçues :', data);
         this.matieresPremieres = data;
         this.isLoadingMp = false;
+        this.cdr.markForCheck();
       },
       error: (error) => {
         console.error('Erreur chargement MP :', error);
-        this.errorMessage = '❌ Impossible de charger les matières premières';
+        this.errorMessage = 'Impossible de charger les matières premières';
         this.isLoadingMp = false;
       }
     });
@@ -75,17 +77,26 @@ export class LotAdd implements OnInit {
     console.log('Valeur mp choisie :', this.lot.mp);
     console.log('Données du formulaire :', this.lot);
 
+    // Si qtRestante n'est pas renseignée, on la met égale à qtInitiale
+  if (!this.lot.qtRestante && this.lot.qtInitiale) {
+    this.lot.qtRestante = this.lot.qtInitiale;
+  }
+  // Idem pour dateMaj
+  if (!this.lot.dateMaj && this.lot.dateArrivee) {
+    this.lot.dateMaj = this.lot.dateArrivee;
+  }
+
     this.lotService.createLot(this.lot).subscribe({
       next: (success) => {
         console.log('Réponse serveur :', success);
 
         if (success) {
-          this.successMessage = '✅ Lot ajouté avec succès';
+          this.successMessage = 'Lot ajouté avec succès';
           setTimeout(() => {
             this.router.navigate(['/lots']);
           }, 1500);
         } else {
-          this.errorMessage = '❌ Ajout échoué';
+          this.errorMessage = 'Ajout échoué';
         }
 
         this.isLoading = false;
@@ -98,7 +109,7 @@ export class LotAdd implements OnInit {
         this.errorMessage =
           error?.error?.detail ||
           error?.error?.message ||
-          '❌ Erreur lors de l’ajout du lot';
+          'Erreur lors de l’ajout du lot';
 
         this.isLoading = false;
       }

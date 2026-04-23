@@ -15,10 +15,20 @@
 }
 
 <table>
+  <thead>
+        <tr>
+          <th>ID</th>
+          <th>NOM FOURNISSEUR</th>
+          <th>ADRESSE</th>
+          <th>EMAIL</th>
+          <th>TELEPHONE</th>
+          <th>ACTIONS</th>
+        </tr>
+      </thead>
   @for (f of fournisseurs$ | async; track trackById($index, f)) {
     <tr>
       <td>{{ f.id }}</td>
-      <td>{{ f.nomEntr }}</td>
+      <td><a [routerLink]="['/fournisseurs', f.id]">{{ f.nomEntr }}</a></td>
       <td>{{ f.adresse }}</td>
       <td>{{ f.emailGen }}</td>
       <td>{{ f.telFourni }}</td>

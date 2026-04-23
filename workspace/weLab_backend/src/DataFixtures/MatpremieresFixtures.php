@@ -11,7 +11,7 @@ class MatpremieresFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $mpData = [
-            // MP, INCI, Catégorie, Fonction, Cosmos
+            // MP, INCI, Catégorie, Fonction, Cosmos // TODO ajouter NOI
             [
                 'nom' => 'Darquench IQ SA MBAL-PA-(RB)',
                 'inci' => 'Cedyl Alcohol/andil isostearal isostearate (andil)',
@@ -150,12 +150,12 @@ class MatpremieresFixtures extends Fixture
             $mp->setCosmos($data['cosmos']);
             
             // Quelques valeurs par défaut pour les champs optionnels
-            $mp->setNoi('NOI-' . uniqid());  // À remplacer par de vraies valeurs si disponibles
+            $mp->setNoi(number_format(mt_rand(0, 100) / 100, 2)); // À remplacer par de vraies valeurs si disponibles
             
             $manager->persist($mp);
-            $this->addReference('mp_' . $index, $mp);
+            $this->addReference('mp_' . $index, $mp); // on ajoute une référence pour pouvoir associer les lots à ces matières premières dans les fixtures des lots
         }
 
-        $manager->flush();
+        $manager->flush(); // on enregistre les matières premières en base de données
     }
 }

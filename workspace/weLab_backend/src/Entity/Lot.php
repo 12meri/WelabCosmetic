@@ -25,6 +25,7 @@ use Doctrine\Common\Collections\Collection;
         new Delete(),
     ]
 )]
+#[ORM\HasLifecycleCallbacks] // pour les callbacks de mise à jour de l'état
 class Lot
 {
     #[ORM\Id]
@@ -59,14 +60,49 @@ class Lot
     private ?string $etat = 'OK';
 
     #[ORM\ManyToOne(inversedBy:'lots')]
-    #[ORM\JoinColumn(nullable:false)]
-    private ?MatPremiere $mp = null;
+    #[ORM\JoinColumn(nullable:false)] // un lot doit être associé à une matière première obligatoirement
+    private ?MatPremiere $mp = null; // mp peut être null pour les lots déjà créés avant l'ajout de la relation, mais pas pour les nouveaux lots
 
     #[ORM\ManyToOne(inversedBy: 'lots')]
     private ?DemandeEchantillon $demandeEchantillon = null;
 
     #[ORM\OneToMany(targetEntity: Alerte::class, mappedBy: 'lot')]
     private Collection $alertes;
+
+    /**
+     * Met à jour automatiquement l'état avant la persistance et la mise à jour.
+     */
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function updateEtat(): void
+    {
+        // 1. Si qtRestante <= 0 → EPUISE
+        if ($this->qtRestante !== null && (float)$this->qtRestante <= 0) {
+            $this->etat = 'EPUISE';
+            return;
+        }
+
+        // 2. Si qtRestante < qtMin → ALERTE
+        if ($this->qtRestante !== null && $this->qtMin !== null && (float)$this->qtRestante < (float)$this->qtMin) {
+            $this->etat = 'ALERTE';
+            return;
+        }
+
+        // 3. Si DDM approche (<= 30 jours) → ALERTE
+        if ($this->ddm !== null) {
+            $now = new \DateTime();
+            $diff = $now->diff($this->ddm);
+            // diff->days est toujours positif, on vérifie que la DDM est dans le futur
+            if ($this->ddm > $now && $diff->days <= 30) {
+                $this->etat = 'ALERTE';
+                return;
+            }
+        }
+
+        // 4. Sinon OK
+        $this->etat = 'OK';
+    }
+
 
     public function getId(): ?int
     {
@@ -171,9 +207,12 @@ class Lot
         return $this;
     }
 
+
+
+    // relation avec mat premiere get et set
     public function getMp(): ?MatPremiere
     {
-        return $this->mp;
+        return $this->mp; 
     }
     public function setMp(?MatPremiere $mp): static {
         $this->mp = $mp;

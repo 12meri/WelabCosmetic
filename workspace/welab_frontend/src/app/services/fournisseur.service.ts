@@ -15,6 +15,7 @@ export class FournisseurService {
 
   constructor(private http: HttpClient) {}
 
+  // Récupérer tous les fournisseurs
   list(): Observable<Fournisseur[]> {
     return this.http
       .get<ApiResponse<Fournisseur>>(this.url, { observe: 'body', responseType: 'json' })
@@ -28,7 +29,7 @@ export class FournisseurService {
   create(fournisseur: Fournisseur): Observable<boolean> {
     const toSend = {
       nomEntr: fournisseur.nomEntr,
-      adresse: fournisseur.adresse || null,
+      adresse: fournisseur.adresse || null, // si adresse est vide ou undefined, envoyer null pour éviter les erreurs de validation côté backend
       emailGen: fournisseur.emailGen || null,
       telFourni: fournisseur.telFourni || null,
     };
@@ -38,12 +39,10 @@ export class FournisseurService {
   }
 
   update(id: number, fournisseur: Fournisseur): Observable<boolean> {
-    const toSend = {
-      nomEntr: fournisseur.nomEntr,
-      adresse: fournisseur.adresse || null,
-      emailGen: fournisseur.emailGen || null,
-      telFourni: fournisseur.telFourni || null,
-    };
+    const toSend: any = { nomEntr: fournisseur.nomEntr };
+    if (fournisseur.adresse !== undefined) toSend.adresse = fournisseur.adresse || null;
+    if (fournisseur.emailGen !== undefined) toSend.emailGen = fournisseur.emailGen || null;
+    if (fournisseur.telFourni !== undefined) toSend.telFourni = fournisseur.telFourni || null;
     return this.http
       .patch(`${this.url}/${id}`, toSend, { headers: this.patchHeaders, observe: 'response' })
       .pipe(map((response) => response.status === 200 || response.status === 204));

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -38,7 +38,8 @@ export class LotEdit implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private lotService: LotService,
-    private mpService: MatpremService
+    private mpService: MatpremService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -67,6 +68,7 @@ export class LotEdit implements OnInit {
     this.mpService.mplist().subscribe({
       next: (data) => {
         this.matieresPremieres = data;
+        this.cdr.markForCheck();
       },
       error: (error) => {
         console.error('Erreur chargement MP :', error);

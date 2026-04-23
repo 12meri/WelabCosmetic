@@ -66,7 +66,7 @@ export class AlerteService {
 
 
 
-// Récupérer les alertes d'un lot spécifique
+// Récupérer les alertes d'un lot spécifique ex: ?lot=3
   getAlertesByLot(lotId: number): Observable<Alerte[]> {
     return this.http.get<ApiResponse<Alerte>>(`${this.url}?lot=${lotId}`, {
       observe: 'body',

@@ -2,14 +2,18 @@
   <h2>Modifier une matière première</h2>
 
   <!-- message succès -->
-  <div *ngIf="successMessage" class="alert success">
-    {{ successMessage }}
-  </div>
+  @if (successMessage) {
+    <div class="alert success">
+      {{ successMessage }}
+    </div>
+  }
 
   <!-- message erreur -->
-  <div *ngIf="errorMessage" class="alert error">
-    {{ errorMessage }}
-  </div>
+  @if (errorMessage) {
+    <div class="alert error">
+      {{ errorMessage }}
+    </div>
+  }
 
   <!-- formulaire -->
   <form (ngSubmit)="updateMp()" #mpForm="ngForm">
@@ -41,26 +45,14 @@
 
     <!-- NOI -->
     <div class="form-group">
-      <label for="NOI">NOI</label>
-      <input
-        type="text"
-        id="NOI"
-        name="NOI"
-        [(ngModel)]="mp.NOI"
-        class="form-control"
-      />
-    </div>
-
-    <!-- catégorie -->
-    <div class="form-group">
-      <label for="categorie">Catégorie</label>
-      <input
-        type="text"
-        id="categorie"
-        name="categorie"
-        [(ngModel)]="mp.categorie"
-        class="form-control"
-      />
+      <label for="NOI">NOI (Natural Origin Index)</label>
+      <input 
+        type="text" 
+        id="NOI" 
+        name="NOI" 
+        [(ngModel)]="mp.NOI" 
+        class="form-control">
+      <small class="text-muted">Format : deux décimales (ex: 0.50, 0.99, 1.00)</small>
     </div>
 
     <!-- fonction -->
@@ -75,21 +67,22 @@
       />
     </div>
 
-    <!-- cosmos -->
     <div class="form-group">
-      <label for="cosmos">Cosmos</label>
-      <input
-        type="text"
-        id="cosmos"
-        name="cosmos"
-        [(ngModel)]="mp.cosmos"
-        class="form-control"
-      />
+      <label for="cosmos">COSMOS *</label>
+      <select 
+        id="cosmos" 
+        name="cosmos" 
+        [(ngModel)]="mp.cosmos" 
+        required
+        class="form-control">
+        <option value="">Sélectionner</option>
+        <option value="OUI">OUI</option>
+        <option value="NON">NON</option>
+      </select>
     </div>
 
     <!-- boutons -->
     <div class="form-actions">
-
       <button
         type="submit"
         class="btn-update"
@@ -103,7 +96,6 @@
         (click)="cancel()">
         Annuler
       </button>
-
     </div>
 
   </form>
