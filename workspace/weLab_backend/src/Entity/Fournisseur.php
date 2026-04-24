@@ -15,13 +15,13 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FournisseurRepository::class)]
 #[ApiResource(
-     operations: [
-            new GetCollection(),
-            new Get(),
-            new Post(),
-            new Patch(),
-            new Delete(),
-        ]
+    operations: [
+        new GetCollection(),
+        new Get(),
+        new Post(),
+        new Patch(),
+        new Delete(),
+    ]
 )]
 class Fournisseur
 {
@@ -41,6 +41,10 @@ class Fournisseur
 
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $telFourni = null;
+
+    // Relation ManyToMany avec Document (côté inverse, mappedBy)
+    #[ORM\ManyToMany(targetEntity: Document::class, mappedBy: 'fournisseurs')]
+    private Collection $documents;
 
     /**
      * @var Collection<int, Distribution>
@@ -68,182 +72,99 @@ class Fournisseur
 
     public function __construct()
     {
+        $this->documents = new ArrayCollection();
         $this->distributions = new ArrayCollection();
         $this->contactFournisseurs = new ArrayCollection();
         $this->fournirs = new ArrayCollection();
         $this->demandeEchantillons = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
+    public function getId(): ?int { return $this->id; }
+
+    public function getNomEntr(): ?string { return $this->nomEntr; }
+    public function setNomEntr(string $nom_entr): static { $this->nomEntr = $nom_entr; return $this; }
+
+    public function getAdresse(): ?string { return $this->adresse; }
+    public function setAdresse(?string $adresse): static { $this->adresse = $adresse; return $this; }
+
+    public function getEmailGen(): ?string { return $this->emailGen; }
+    public function setEmailGen(?string $email_gen): static { $this->emailGen = $email_gen; return $this; }
+
+    public function getTelFourni(): ?string { return $this->telFourni; }
+    public function setTelFourni(?string $tel_fourni): static { $this->telFourni = $tel_fourni; return $this; }
+
+    public function getDocuments(): Collection { return $this->documents; }
+    public function addDocument(Document $document): static {
+        if (!$this->documents->contains($document)) {
+            $this->documents->add($document);
+            $document->addFournisseur($this);
+        }
+        return $this;
     }
-
-    public function getNomEntr(): ?string
-    {
-        return $this->nomEntr;
-    }
-
-    public function setNomEntr(string $nom_entr): static
-    {
-        $this->nomEntr = $nom_entr;
-
+    public function removeDocument(Document $document): static {
+        if ($this->documents->removeElement($document)) {
+            $document->removeFournisseur($this);
+        }
         return $this;
     }
 
-    public function getAdresse(): ?string
-    {
-        return $this->adresse;
-    }
-
-    public function setAdresse(?string $adresse): static
-    {
-        $this->adresse = $adresse;
-
-        return $this;
-    }
-
-    public function getEmailGen(): ?string
-    {
-        return $this->emailGen;
-    }
-
-    public function setEmailGen(?string $email_gen): static
-    {
-        $this->emailGen = $email_gen;
-
-        return $this;
-    }
-
-    public function getTelFourni(): ?string
-    {
-        return $this->telFourni;
-    }
-
-    public function setTelFourni(?string $tel_fourni): static
-    {
-        $this->telFourni = $tel_fourni;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Distribution>
-     */
-    public function getDistributions(): Collection
-    {
-        return $this->distributions;
-    }
-
-    public function addDistribution(Distribution $distribution): static
-    {
+    public function getDistributions(): Collection { return $this->distributions; }
+    public function addDistribution(Distribution $distribution): static {
         if (!$this->distributions->contains($distribution)) {
             $this->distributions->add($distribution);
             $distribution->setFournisseur($this);
         }
-
         return $this;
     }
-
-    public function removeDistribution(Distribution $distribution): static
-    {
-        if ($this->distributions->removeElement($distribution)) {
-            // set the owning side to null (unless already changed)
-            if ($distribution->getFournisseur() === $this) {
-                $distribution->setFournisseur(null);
-            }
+    public function removeDistribution(Distribution $distribution): static {
+        if ($this->distributions->removeElement($distribution) && $distribution->getFournisseur() === $this) {
+            $distribution->setFournisseur(null);
         }
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, ContactFournisseur>
-     */
-    public function getContactFournisseurs(): Collection
-    {
-        return $this->contactFournisseurs;
-    }
-
-    public function addContactFournisseur(ContactFournisseur $contactFournisseur): static
-    {
+    public function getContactFournisseurs(): Collection { return $this->contactFournisseurs; }
+    public function addContactFournisseur(ContactFournisseur $contactFournisseur): static {
         if (!$this->contactFournisseurs->contains($contactFournisseur)) {
             $this->contactFournisseurs->add($contactFournisseur);
             $contactFournisseur->setFournisseur($this);
         }
-
         return $this;
     }
-
-    public function removeContactFournisseur(ContactFournisseur $contactFournisseur): static
-    {
-        if ($this->contactFournisseurs->removeElement($contactFournisseur)) {
-            // set the owning side to null (unless already changed)
-            if ($contactFournisseur->getFournisseur() === $this) {
-                $contactFournisseur->setFournisseur(null);
-            }
+    public function removeContactFournisseur(ContactFournisseur $contactFournisseur): static {
+        if ($this->contactFournisseurs->removeElement($contactFournisseur) && $contactFournisseur->getFournisseur() === $this) {
+            $contactFournisseur->setFournisseur(null);
         }
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, Fournir>
-     */
-    public function getFournirs(): Collection
-    {
-        return $this->fournirs;
-    }
-
-    public function addFournir(Fournir $fournir): static
-    {
+    public function getFournirs(): Collection { return $this->fournirs; }
+    public function addFournir(Fournir $fournir): static {
         if (!$this->fournirs->contains($fournir)) {
             $this->fournirs->add($fournir);
             $fournir->setFournisseur($this);
         }
-
         return $this;
     }
-
-    public function removeFournir(Fournir $fournir): static
-    {
-        if ($this->fournirs->removeElement($fournir)) {
-            // set the owning side to null (unless already changed)
-            if ($fournir->getFournisseur() === $this) {
-                $fournir->setFournisseur(null);
-            }
+    public function removeFournir(Fournir $fournir): static {
+        if ($this->fournirs->removeElement($fournir) && $fournir->getFournisseur() === $this) {
+            $fournir->setFournisseur(null);
         }
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, DemandeEchantillon>
-     */
-    public function getDemandeEchantillons(): Collection
-    {
-        return $this->demandeEchantillons;
-    }
-
-    public function addDemandeEchantillon(DemandeEchantillon $demandeEchantillon): static
-    {
+    public function getDemandeEchantillons(): Collection { return $this->demandeEchantillons; }
+    public function addDemandeEchantillon(DemandeEchantillon $demandeEchantillon): static {
         if (!$this->demandeEchantillons->contains($demandeEchantillon)) {
             $this->demandeEchantillons->add($demandeEchantillon);
             $demandeEchantillon->setFournisseur($this);
         }
-
         return $this;
     }
-
-    public function removeDemandeEchantillon(DemandeEchantillon $demandeEchantillon): static
-    {
-        if ($this->demandeEchantillons->removeElement($demandeEchantillon)) {
-            // set the owning side to null (unless already changed)
-            if ($demandeEchantillon->getFournisseur() === $this) {
-                $demandeEchantillon->setFournisseur(null);
-            }
+    public function removeDemandeEchantillon(DemandeEchantillon $demandeEchantillon): static {
+        if ($this->demandeEchantillons->removeElement($demandeEchantillon) && $demandeEchantillon->getFournisseur() === $this) {
+            $demandeEchantillon->setFournisseur(null);
         }
-
         return $this;
     }
 }

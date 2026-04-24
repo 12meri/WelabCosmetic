@@ -25,11 +25,21 @@ access http://localhost:8021/
 pour larreter 
 ctrl C
 
+# les utilisateurs:
 
+##admin
+    "email": "admin@example.com",
+    "password": "admin123"
+##stagiare
+    "email": "stagiare@example.com",
+    "password": "stage123"
+
+    
 
 
 ## Rania
 a creer les interfaces:
+- login
 - matiere 1ere
 - lot
 - alerte
@@ -101,6 +111,8 @@ ajouter contact fournisser ( apartir de fournisseur pour savoir de quel entr le 
 
 
 
-- interface emeil et interface document pas encore a faire apres que je recupere le travail 
+- interface emeil et interface document pas encore a faire apres que je recupere le travail (cest bon entites creer fixture creer ) 
 
 pour le routage des composent (interface); il suffit dajouter les path dans app.router.ts
+
+----------------

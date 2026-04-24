@@ -62,6 +62,32 @@ class MatPremiere
     #[Groups(['matiere_premiere:read'])]
     private ?string $cosmos = null;
 
+    
+
+    // ...
+#[ORM\ManyToMany(targetEntity: Document::class, mappedBy: 'matieres')]
+private Collection $documents;
+
+
+
+public function getDocuments(): Collection { return $this->documents; }
+
+public function addDocument(Document $document): static
+{
+    if (!$this->documents->contains($document)) {
+        $this->documents->add($document);
+        $document->addMatiere($this);
+    }
+    return $this;
+}
+
+public function removeDocument(Document $document): static {
+    if ($this->documents->removeElement($document)) {
+        $document->removeMatiere($this);
+    }
+    return $this;
+ }
+
     /**
      * @var Collection<int, Fournir>
      */
@@ -93,6 +119,8 @@ class MatPremiere
         $this->fournirs = new ArrayCollection();
         $this->distribues = new ArrayCollection();
         $this->demandeEchantillons = new ArrayCollection();
+        $this->documents = new ArrayCollection(); // ← AJOUTER
+
     }
 
     public function getId(): ?int

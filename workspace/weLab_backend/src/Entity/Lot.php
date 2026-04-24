@@ -69,6 +69,36 @@ class Lot
     #[ORM\OneToMany(targetEntity: Alerte::class, mappedBy: 'lot')]
     private Collection $alertes;
 
+   
+
+     #[ORM\ManyToMany(targetEntity: Document::class, mappedBy: 'lots')]
+    private Collection $documents;
+
+  
+
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
+    }
+
+    public function addDocument(Document $document): static
+    {
+        if (!$this->documents->contains($document)) {
+            $this->documents->add($document);
+            $document->addLot($this); // relation bidirectionnelle
+        }
+        return $this;
+    }
+
+    public function removeDocument(Document $document): static
+    {
+        if ($this->documents->removeElement($document)) {
+            $document->removeLot($this);
+        }
+        return $this;
+    }
+
+
     /**
      * Met à jour automatiquement l'état avant la persistance et la mise à jour.
      */
@@ -235,11 +265,14 @@ class Lot
         public function __construct()
     {
         $this->alertes = new ArrayCollection();
+        $this->documents = new ArrayCollection(); // ← AJOUTER
+
     }
 
     public function getAlertes(): Collection
     {
         return $this->alertes;
+
     }
 
     public function addAlerte(Alerte $alerte): static

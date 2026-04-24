@@ -11,3 +11,7 @@ api_platform:
     #         apiKey:
     #             name: Authorization
     #             type: header
+    formats:
+        jsonld: ['application/ld+json']
+        json: ['application/json']
+        multipart: ['multipart/form-data']
