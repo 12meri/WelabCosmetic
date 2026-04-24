@@ -1,6 +1,6 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { AuthenticationService } from '../services/AuthenticationService';
+import { AuthenticationService } from '../services/authenticationService';
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthenticationService)
   if (auth.isAuthentified) {

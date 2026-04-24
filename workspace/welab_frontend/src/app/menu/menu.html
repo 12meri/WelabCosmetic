@@ -1,14 +1,30 @@
-<nav class="nav_container">
-    <button class="logo" routerLink="/home">WelabCosmetic</button>
-    <ul class="button_nav">
+<!-- src/app/component/menu/menu.html -->
+<!-- Le menu n'est visible que si l'utilisateur est connecté -->
+<!-- Les items sont les mêmes pour admin et stagiaire, sauf "Gestion des comptes" (admin only) -->
 
-        <li><a routerLink="/lots" routerLinkActive="active">Stock</a></li>
-        <li><a routerLink="/matpremieres" routerLinkActive="active">Matieres premieres</a></li>
-        <li><a routerLink="/fournisseurs" routerLinkActive="active">Fournisseurs</a></li>
-        <li><a routerLink="/distributions" routerLinkActive="active">Distributions </a></li>
-        <li><a routerLink="/alertes" routerLinkActive="active">Alertes </a></li>
-        <li><a routerLink="/demande-echantillon/add" routerLinkActive="active">Demande dechantillon</a></li>
-        <li><a routerLink="/matpremieres" routerLinkActive="active">Gestion des comptes </a></li>
+<nav class="nav_container">
+  <button class="logo" routerLink="/lots">WelabCosmetic</button>
+
+  @if (auth.isAuthentified) {
+    <ul class="button_nav">
+      <!-- Accessible à tous (admin + stagiaire) -->
+      <li><a routerLink="/lots"                   routerLinkActive="active">Stock</a></li>
+      <li><a routerLink="/matpremieres"            routerLinkActive="active">Matières premières</a></li>
+      <li><a routerLink="/fournisseurs"            routerLinkActive="active">Fournisseurs</a></li>
+      <li><a routerLink="/distributions"           routerLinkActive="active">Distributions</a></li>
+      <li><a routerLink="/alertes"                 routerLinkActive="active">Alertes</a></li>
+      <li><a routerLink="/demande-echantillon/add" routerLinkActive="active">Demande d'échantillon</a></li>
+
+      <!-- Accessible uniquement aux admins -->
+      @if (auth.isAdmin) {
+        <li><a routerLink="/admin/comptes" routerLinkActive="active">Gestion des comptes</a></li>
+      }
     </ul>
-    <button>Se deconnecter</button>
+
+    <!-- Email de l'utilisateur connecté -->
+    <span class="user-email">{{ auth.email }}</span>
+
+    <!-- Bouton déconnexion : vide le localStorage et redirige vers /login -->
+    <button (click)="auth.logout()">Se déconnecter</button>
+  }
 </nav>

@@ -1,27 +1,29 @@
+// src/app/login/login.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { AuthenticationService } from '../services/AuthenticationService';
+import { AuthenticationService } from '../services/authenticationService';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  username = '';
+  email = '';
   password = '';
+  errorMessage = '';
 
-  get isValid() {
-    return this.username !== '' && this.password !== '';
+  get isValid(): boolean {
+    return this.email !== '' && this.password !== '';
   }
 
   constructor(public auth: AuthenticationService) {}
 
-  login() {
-    this.auth.login(this.username, this.password);
+  login(): void {
+    this.errorMessage = '';
+    this.auth.login(this.email, this.password);
   }
 }
