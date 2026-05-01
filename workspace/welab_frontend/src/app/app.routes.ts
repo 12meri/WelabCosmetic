@@ -20,6 +20,12 @@ import { DistributionsEdit } from './component/distributions/distributions-edit/
 import { ContactFournisseursList } from './component/contact-fournisseurs/contact-fournisseurs-list/contact-fournisseurs-list';
 import { ContactFournisseursAdd } from './component/contact-fournisseurs/contact-fournisseurs-add/contact-fournisseurs-add';
 import { ContactFournisseursEdit } from './component/contact-fournisseurs/contact-fournisseurs-edit/contact-fournisseurs-edit';
+import { EmailsList } from './component/emails/emails-list/emails-list';
+import { EmailsAdd } from './component/emails/emails-add/emails-add';
+import { EmailsEdit } from './component/emails/emails-edit/emails-edit';
+import { DocumentsList } from './component/documents/documents-list/documents-list';
+import { DocumentsAdd } from './component/documents/documents-add/documents-add';
+import { DocumentsEdit } from './component/documents/documents-edit/documents-edit';
 import { FournisseurDetailComponent } from './component/fournisseurs/fournisseur-detail/fournisseur-detail.component';
 import { authGuard } from './guards/Auth.guard';
 import { adminGuard } from './guards/Admin.guard';
@@ -52,6 +58,12 @@ export const routes: Routes = [
   { path: 'contact-fournisseurs',          component: ContactFournisseursList,   canActivate: [authGuard] },
   { path: 'contact-fournisseurs/add',      component: ContactFournisseursAdd,    canActivate: [authGuard] },
   { path: 'contact-fournisseurs/edit/:id', component: ContactFournisseursEdit,   canActivate: [authGuard] },
+  { path: 'emails',                        component: EmailsList,                canActivate: [authGuard] },
+  { path: 'emails/add',                    component: EmailsAdd,                 canActivate: [authGuard] },
+  { path: 'emails/edit/:id',               component: EmailsEdit,                canActivate: [authGuard] },
+  { path: 'documents',                     component: DocumentsList,             canActivate: [authGuard] },
+  { path: 'documents/add',                 component: DocumentsAdd,              canActivate: [authGuard] },
+  { path: 'documents/edit/:id',            component: DocumentsEdit,             canActivate: [authGuard] },
 
   // ── Admin seulement (adminGuard) ──────────────────────────────────────────
   // Ajoute ici tes futurs composants de gestion des comptes quand ils seront créés

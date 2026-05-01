@@ -1,0 +1,109 @@
+<div class="document-edit-container">
+  <h2>Modifier un document</h2>
+
+  @if (successMessage) {
+    <div class="alert success">{{ successMessage }}</div>
+  }
+
+  @if (errorMessage) {
+    <div class="alert error">{{ errorMessage }}</div>
+  }
+
+  <!--
+    Pas d'<input type="file"> ici : un PATCH ne change que les
+    métadonnées. Pour remplacer le fichier physique, l'utilisateur doit
+    supprimer le document et en créer un nouveau (workflow standard
+    avec VichUploader sur API Platform).
+  -->
+  <form (ngSubmit)="update()" #docForm="ngForm">
+
+    @if (document.fileName) {
+      <div class="form-group">
+        <label>Fichier actuel</label>
+        <p class="file-info">📄 {{ document.fileName }}</p>
+      </div>
+    }
+
+    <div class="form-group">
+      <label for="nomFile">Nom du document *</label>
+      <input
+        type="text"
+        id="nomFile"
+        name="nomFile"
+        maxlength="200"
+        [(ngModel)]="document.nomFile"
+        required
+        class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="type">Type</label>
+      <input
+        type="text"
+        id="type"
+        name="type"
+        maxlength="50"
+        [(ngModel)]="document.type"
+        placeholder="Ex: facture, fiche_technique, certificat_qualite"
+        class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="lots">Lots associés (Ctrl+clic pour multi-sélection)</label>
+      <select
+        id="lots"
+        name="lots"
+        multiple
+        [(ngModel)]="selectedLots"
+        class="form-control select-multiple">
+        @for (l of lots; track l.id) {
+          <option [value]="l['@id'] || '/api/lots/' + l.id">
+            #{{ l.id }} - {{ l.numLot }}
+          </option>
+        }
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="matieres">Matières premières associées</label>
+      <select
+        id="matieres"
+        name="matieres"
+        multiple
+        [(ngModel)]="selectedMatieres"
+        class="form-control select-multiple">
+        @for (m of matieres; track m.id) {
+          <option [value]="m['@id'] || '/api/mat_premieres/' + m.id">
+            #{{ m.id }} - {{ m.nomMP }}
+          </option>
+        }
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="fournisseurs">Fournisseurs associés</label>
+      <select
+        id="fournisseurs"
+        name="fournisseurs"
+        multiple
+        [(ngModel)]="selectedFournisseurs"
+        class="form-control select-multiple">
+        @for (f of fournisseurs; track f.id) {
+          <option [value]="f['@id'] || '/api/fournisseurs/' + f.id">
+            #{{ f.id }} - {{ f.nomEntr }}
+          </option>
+        }
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="isLoading || docForm.invalid" class="btn-update">
+        {{ isLoading ? 'Modification...' : 'Modifier' }}
+      </button>
+      <button type="button" (click)="cancel()" class="btn-cancel">
+        Annuler
+      </button>
+    </div>
+
+  </form>
+</div>

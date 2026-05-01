@@ -1,0 +1,73 @@
+<h1>Emails</h1>
+
+<a routerLink="add" class="btn-add">Composer un email</a>
+
+@if (successMessage) {
+  <div class="alert success">
+    {{ successMessage }}
+  </div>
+}
+
+@if (errorMessage) {
+  <div class="alert error">
+    {{ errorMessage }}
+  </div>
+}
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>SUJET</th>
+      <th>DATE D'ENVOI</th>
+      <th>DEMANDE D'ÉCHANTILLON</th>
+      <th>ACTIONS</th>
+    </tr>
+  </thead>
+
+  <!--
+    @for : nouvelle syntaxe Angular 17+ qui remplace *ngFor.
+    On itère sur le tableau `emails` rempli par forkJoin une fois que
+    tous les caches d'IRI sont prêts (évite l'affichage progressif).
+  -->
+  @for (email of emails; track email.id) {
+    <tr>
+      <td>{{ email.id }}</td>
+      <td>{{ email.sujet }}</td>
+      <td>{{ email.dateEnvoie | date:'dd/MM/yyyy HH:mm' }}</td>
+      <td>{{ getDemandeLabel(email.demandeEchantillon) }}</td>
+      <td>
+        @if (email.id) {
+          <button (click)="openDeleteModal(email.id)" class="btn-delete">
+            Supprimer
+          </button>
+          <a [routerLink]="['/emails/edit', email.id]" class="btn-update">
+            Modifier
+          </a>
+        }
+      </td>
+    </tr>
+  } @empty {
+    <!-- Bloc affiché quand le tableau est vide. -->
+    <tr>
+      <td colspan="5" class="empty">Aucun email trouvé</td>
+    </tr>
+  }
+</table>
+
+@if (showDeleteModal) {
+  <div class="modal-backdrop">
+    <div class="modal-box">
+      <h3>Confirmer la suppression</h3>
+      <p>Voulez-vous vraiment supprimer cet email ?</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="closeDeleteModal()">
+          Annuler
+        </button>
+        <button class="btn-delete" (click)="confirmDelete()">
+          Supprimer
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,126 @@
+<div class="document-add-container">
+  <h2>Uploader un document</h2>
+
+  @if (successMessage) {
+    <div class="alert success">{{ successMessage }}</div>
+  }
+
+  @if (errorMessage) {
+    <div class="alert error">{{ errorMessage }}</div>
+  }
+
+  <!--
+    enctype="multipart/form-data" sur la balise <form> est purement
+    informatif ici (on ne soumet pas le formulaire en HTML natif), mais
+    on le laisse pour la lisibilité : ça documente le fait qu'on
+    transmet un fichier binaire.
+  -->
+  <form (ngSubmit)="create()" #docForm="ngForm" enctype="multipart/form-data">
+
+    <div class="form-group">
+      <label for="file">Fichier *</label>
+      <!--
+        (change) : événement déclenché quand l'utilisateur choisit un
+        fichier dans la boîte de dialogue. La méthode onFileSelected()
+        capture event.target.files[0] et le stocke en variable.
+        Pas de [(ngModel)] : Angular ne supporte pas le two-way binding
+        sur input[type=file] (les fichiers sont gérés à part).
+      -->
+      <input
+        type="file"
+        id="file"
+        name="file"
+        (change)="onFileSelected($event)"
+        required
+        class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="nomFile">Nom du document *</label>
+      <input
+        type="text"
+        id="nomFile"
+        name="nomFile"
+        maxlength="200"
+        [(ngModel)]="document.nomFile"
+        required
+        class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="type">Type</label>
+      <input
+        type="text"
+        id="type"
+        name="type"
+        maxlength="50"
+        [(ngModel)]="document.type"
+        placeholder="Ex: facture, fiche_technique, certificat_qualite"
+        class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="lots">Lots associés (Ctrl+clic pour multi-sélection)</label>
+      <!--
+        <select multiple> : permet de sélectionner plusieurs lignes.
+        [(ngModel)] est lié à un tableau d'IRI (string[]).
+        [value]="l['@id']" : on stocke directement l'IRI JSON-LD
+        (ex: "/api/lots/3") pour pouvoir l'envoyer telle quelle au backend.
+      -->
+      <select
+        id="lots"
+        name="lots"
+        multiple
+        [(ngModel)]="selectedLots"
+        class="form-control select-multiple">
+        @for (l of lots; track l.id) {
+          <option [value]="l['@id'] || '/api/lots/' + l.id">
+            #{{ l.id }} - {{ l.numLot }}
+          </option>
+        }
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="matieres">Matières premières associées</label>
+      <select
+        id="matieres"
+        name="matieres"
+        multiple
+        [(ngModel)]="selectedMatieres"
+        class="form-control select-multiple">
+        @for (m of matieres; track m.id) {
+          <option [value]="m['@id'] || '/api/mat_premieres/' + m.id">
+            #{{ m.id }} - {{ m.nomMP }}
+          </option>
+        }
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="fournisseurs">Fournisseurs associés</label>
+      <select
+        id="fournisseurs"
+        name="fournisseurs"
+        multiple
+        [(ngModel)]="selectedFournisseurs"
+        class="form-control select-multiple">
+        @for (f of fournisseurs; track f.id) {
+          <option [value]="f['@id'] || '/api/fournisseurs/' + f.id">
+            #{{ f.id }} - {{ f.nomEntr }}
+          </option>
+        }
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="isLoading || !docForm.valid" class="btn-submit">
+        {{ isLoading ? 'Upload en cours...' : 'Envoyer' }}
+      </button>
+      <button type="button" (click)="cancel()" class="btn-cancel">
+        Annuler
+      </button>
+    </div>
+
+  </form>
+</div>

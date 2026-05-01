@@ -1,0 +1,83 @@
+<h1>Documents</h1>
+
+<a routerLink="add" class="btn-add">Uploader un document</a>
+
+@if (successMessage) {
+  <div class="alert success">{{ successMessage }}</div>
+}
+
+@if (errorMessage) {
+  <div class="alert error">{{ errorMessage }}</div>
+}
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>NOM DU FICHIER</th>
+      <th>TYPE</th>
+      <th>DATE UPLOAD</th>
+      <th>LOTS</th>
+      <th>MATIÈRES</th>
+      <th>FOURNISSEURS</th>
+      <th>ACTIONS</th>
+    </tr>
+  </thead>
+
+  <!--
+    @for + track : nouvelle syntaxe Angular 17+ qui remplace *ngFor.
+    On itère sur le tableau `documents` rempli par forkJoin une fois que
+    tous les caches d'IRI sont prêts (évite l'affichage progressif).
+  -->
+  @for (doc of documents; track doc.id) {
+    <tr>
+      <td>{{ doc.id }}</td>
+      <td>{{ doc.nomFile }}</td>
+      <td>{{ doc.type || '-' }}</td>
+      <td>{{ doc.dateUpload | date:'dd/MM/yyyy HH:mm' }}</td>
+      <td>{{ getLotsLabels(doc.lots) }}</td>
+      <td>{{ getMatieresLabels(doc.matieres) }}</td>
+      <td>{{ getFournisseursLabels(doc.fournisseurs) }}</td>
+      <td>
+        @if (doc.fileName) {
+          <!--
+            target="_blank" + rel="noopener" : ouvre le fichier dans un
+            nouvel onglet sans donner accès à window.opener (sécurité).
+          -->
+          <a
+            [href]="getDownloadUrl(doc.fileName)"
+            target="_blank"
+            rel="noopener"
+            class="btn-download">
+            Télécharger
+          </a>
+        }
+        @if (doc.id) {
+          <a [routerLink]="['/documents/edit', doc.id]" class="btn-update">
+            Modifier
+          </a>
+          <button (click)="openDeleteModal(doc.id)" class="btn-delete">
+            Supprimer
+          </button>
+        }
+      </td>
+    </tr>
+  } @empty {
+    <tr>
+      <td colspan="8" class="empty">Aucun document trouvé</td>
+    </tr>
+  }
+</table>
+
+@if (showDeleteModal) {
+  <div class="modal-backdrop">
+    <div class="modal-box">
+      <h3>Confirmer la suppression</h3>
+      <p>Voulez-vous vraiment supprimer ce document ?</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="closeDeleteModal()">Annuler</button>
+        <button class="btn-delete" (click)="confirmDelete()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+}

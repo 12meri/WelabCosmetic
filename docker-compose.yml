@@ -5,10 +5,10 @@ services:
       dockerfile: Dockerfile
       no_cache: true
       args:
-        USERNAME: meriem # À Modifier
+        USERNAME: aya # À Modifier
         UID: 1000        # À Modifier
-        EMAIL: meriem.ould-taleb@univ-orleans.fr # À Modifier
-        NAME: "meriem ould taleb"        # À Modifier
+        EMAIL: aya.hassani@univ-orleans.fr # À Modifier
+        NAME: "Hassani"        # À Modifier
     container_name: LaboWelab 
     command: /bin/bash
     tty: true

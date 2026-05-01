@@ -1,0 +1,77 @@
+<div class="email-add-container">
+  <h2>Composer un email</h2>
+
+  @if (successMessage) {
+    <div class="alert success">{{ successMessage }}</div>
+  }
+
+  @if (errorMessage) {
+    <div class="alert error">{{ errorMessage }}</div>
+  }
+
+  <!--
+    (ngSubmit) : événement déclenché quand le formulaire est soumis.
+    On lui passe la méthode create() qui appelle le service.
+    #emailForm="ngForm" : crée une référence locale au formulaire,
+    utile pour vérifier sa validité avant l'envoi.
+  -->
+  <form (ngSubmit)="create()" #emailForm="ngForm">
+
+    <div class="form-group">
+      <label for="sujet">Sujet *</label>
+      <input
+        type="text"
+        id="sujet"
+        name="sujet"
+        maxlength="200"
+        [(ngModel)]="email.sujet"
+        required
+        class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="txt">Message</label>
+      <!--
+        textarea lié à `email.txt` via [(ngModel)] : la frappe au
+        clavier alimente directement la propriété TypeScript.
+      -->
+      <textarea
+        id="txt"
+        name="txt"
+        rows="6"
+        [(ngModel)]="email.txt"
+        class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="demandeEchantillon">Demande d'échantillon *</label>
+      <!--
+        Le <select> reçoit l'IRI de la demande comme valeur
+        ([value]="d['@id']"). C'est cette IRI qu'on enverra ensuite
+        au backend, conformément au format JSON-LD attendu par API
+        Platform.
+      -->
+      <select
+        id="demandeEchantillon"
+        name="demandeEchantillon"
+        [(ngModel)]="email.demandeEchantillon"
+        required
+        class="form-control">
+        <option value="" disabled>-- Choisir une demande --</option>
+        @for (d of demandes; track d.id) {
+          <option [value]="d['@id']">{{ demandeLabel(d) }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="isLoading || !emailForm.valid" class="btn-submit">
+        {{ isLoading ? 'Envoi en cours...' : 'Envoyer' }}
+      </button>
+      <button type="button" (click)="cancel()" class="btn-cancel">
+        Annuler
+      </button>
+    </div>
+
+  </form>
+</div>
