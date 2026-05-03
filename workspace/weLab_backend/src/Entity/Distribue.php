@@ -12,7 +12,7 @@ use App\Repository\DistribueRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DistribueRepository::class)]
-#[ORM\UniqueConstraint(name: 'unique_dist_mp', columns:['distribution_id','mp_id'])]
+//#[ORM\UniqueConstraint(name: 'unique_dist_mp', columns:['distribution_id','mp_id'])]
 #[ApiResource(
     operations: [
             new GetCollection(),

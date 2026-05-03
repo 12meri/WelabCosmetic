@@ -1,17 +1,36 @@
 <div class="modal-backdrop">
   <div class="modal-box">
-    <h3>Modifier le prix / MOQ</h3>
+    <h3>Modifier la fourniture</h3>
+
+    <div class="form-group">
+      <label>Matière première</label>
+      <input type="text" [value]="matiereNom" disabled class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label>Distribution (marque)</label>
+      <select [(ngModel)]="distributionId" class="form-control">
+        <option [value]="null">-- Aucune marque --</option>
+        @for (d of distributions; track d.id) {
+          <option [value]="d.id">{{ d.nomMarque }}</option>
+        }
+      </select>
+      <small class="hint">Changer la distribution peut échouer si le triplet (matière, fournisseur, distribution) existe déjà.</small>
+    </div>
+
     <div class="form-group">
       <label>Prix (€)</label>
       <input type="number" step="0.01" [(ngModel)]="prix" class="form-control">
     </div>
+
     <div class="form-group">
       <label>MOQ (quantité minimale)</label>
       <input type="number" step="0.01" [(ngModel)]="moq" class="form-control">
     </div>
+
     <div class="modal-actions">
-      <button class="btn-save" (click)="save()">Enregistrer</button>
       <button class="btn-cancel" (click)="cancel()">Annuler</button>
+      <button class="btn-save" (click)="save()">Enregistrer</button>
     </div>
   </div>
 </div>

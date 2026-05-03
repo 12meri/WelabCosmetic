@@ -1,0 +1,38 @@
+<div class="modal-backdrop">
+  <div class="modal-box">
+    <h3>Gérer les contacts pour cette matière première et marque</h3>
+
+    <!-- Liste des contacts existants -->
+    <div class="contact-list">
+      <label>Contacts associés :</label>
+      @if (existingContacts.length === 0) {
+        <p class="hint">Aucun contact spécifique pour cette paire.</p>
+      } @else {
+        @for (c of existingContacts; track c.id) {
+          <div class="contact-item">
+            <span>{{ c.nom }} {{ c.prenom }} ({{ c.fonction }})</span>
+            <button type="button" class="btn-delete-small" [disabled]="loading" (click)="deleteContact(c.id!)">Supprimer</button>
+          </div>
+        }
+      }
+    </div>
+
+    <!-- Ajouter un nouveau contact -->
+    <div class="form-group">
+      <label>Ajouter un contact</label>
+      <select [(ngModel)]="selectedContactId" class="form-control" [disabled]="loading">
+        <option [value]="null">-- Choisir un contact --</option>
+        @for (c of availableContacts; track c.id) {
+          <option [value]="c.id">{{ c.nom }} {{ c.prenom }} ({{ c.fonction }})</option>
+        }
+      </select>
+      <button class="btn-add-small" [disabled]="!selectedContactId || loading" (click)="addContact()">
+        {{ loading ? 'Chargement...' : 'Ajouter' }}
+      </button>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" [disabled]="loading" (click)="cancel()">Fermer</button>
+    </div>
+  </div>
+</div>

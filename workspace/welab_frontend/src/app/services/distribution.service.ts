@@ -15,13 +15,14 @@ export class DistributionService {
 
   constructor(private http: HttpClient) {}
 
-  
+  // la méthode getAll récupère tous les enregistrements de distribution à partir du backend Symfony. Elle envoie une requête GET à l'URL de l'API avec le paramètre "pagination=false" pour obtenir tous les résultats sans pagination. La réponse est ensuite transformée pour extraire le tableau de distribution à partir de la propriété "member" de la réponse JSON.
   list(): Observable<Distribution[]> {
     return this.http
       .get<ApiResponse<Distribution>>(`${this.url}?pagination=false`, { observe: 'body', responseType: 'json' })
       .pipe(map((data) => data['member']));
   }
 
+  //  la méthode getById permet de récupérer un enregistrement de distribution spécifique en fonction de son ID. Elle envoie une requête GET à l'URL de l'API avec l'ID de la distribution dans l'URL. Si la récupération est réussie, elle retourne un Observable contenant le distribution correspondant.
   getById(id: number): Observable<Distribution> {
     return this.http.get<Distribution>(`${this.url}/${id}`);
   }
@@ -65,6 +66,7 @@ create(distribution: Distribution): Observable<boolean> {
     );
 }
 
+// la méthode update permet de mettre à jour un enregistrement de distribution existant. Elle envoie une requête PATCH à l'URL de l'API avec l'ID de la distribution dans l'URL et les données mises à jour dans le corps de la requête. Si la mise à jour est réussie, elle retourne un Observable contenant un booléen indiquant si la réponse a un statut HTTP 200 (OK) ou 204 (No Content).
   update(id: number, distribution: Distribution): Observable<boolean> {
     const toSend = {
       nomMarque: distribution.nomMarque,
@@ -75,6 +77,7 @@ create(distribution: Distribution): Observable<boolean> {
       .pipe(map((response) => response.status === 200 || response.status === 204));
   }
 
+  // la méthode delete permet de supprimer un enregistrement de distribution en fonction de son ID. Elle envoie une requête DELETE à l'URL de l'API avec l'ID de la distribution dans l'URL. Si la suppression est réussie, elle retourne un Observable contenant un booléen indiquant si la réponse a un statut HTTP 200 (OK) ou 204 (No Content).
   delete(id: number): Observable<boolean> {
     return this.http
       .delete(`${this.url}/${id}`, { observe: 'response' })

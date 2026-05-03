@@ -1,0 +1,17 @@
+<div class="modal-backdrop">
+  <div class="modal-box">
+    <h3>Associer un contact à la matière première pour cette marque</h3>
+    <div class="form-group"><label>Matière première</label><input type="text" [value]="nomMatiere" disabled class="form-control"></div>
+    <div class="form-group"><label>Distribution (marque)</label><input type="text" [value]="nomDistribution" disabled class="form-control"></div>
+    <div class="form-group"><label>Contact</label>
+      <select [(ngModel)]="selectedContactId" class="form-control">
+        <option [value]="null">-- Aucun contact --</option>
+        @for (c of contacts; track c.id) { <option [value]="c.id">{{ c.nom }} {{ c.prenom }} ({{ c.fonction }})</option> }
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="cancel()">Annuler</button>
+      <button class="btn-save" (click)="save()">Enregistrer</button>
+    </div>
+  </div>
+</div>

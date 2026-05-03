@@ -1,0 +1,59 @@
+<div class="email-edit-container">
+  <h2>Modifier un email</h2>
+
+  @if (isLoadingData) {
+    <div class="alert info">Chargement des données...</div>
+  }
+
+  @if (successMessage) {
+    <div class="alert success">{{ successMessage }}</div>
+  }
+
+  @if (errorMessage) {
+    <div class="alert error">{{ errorMessage }}</div>
+  }
+
+  @if (!isLoadingData) {
+    <form (ngSubmit)="update()" #emailForm="ngForm">
+
+      <div class="form-group">
+        <label for="sujet">Sujet *</label>
+        <input
+          type="text"
+          id="sujet"
+          name="sujet"
+          maxlength="200"
+          [(ngModel)]="email.sujet"
+          required
+          class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="txt">Message</label>
+        <textarea
+          id="txt"
+          name="txt"
+          rows="6"
+          [(ngModel)]="email.txt"
+          class="form-control"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Demande d'échantillon (non modifiable)</label>
+        <p class="form-control-static">{{ demandeLabel }}</p>
+        <!-- On garde une copie cachée pour la soumission, bien que le service n'envoie que sujet/txt -->
+        <input type="hidden" name="demandeEchantillon" [value]="email.demandeEchantillon">
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" [disabled]="isLoading || emailForm.invalid" class="btn-update">
+          {{ isLoading ? 'Modification...' : 'Modifier' }}
+        </button>
+        <button type="button" (click)="cancel()" class="btn-cancel">
+          Annuler
+        </button>
+      </div>
+
+    </form>
+  }
+</div>

@@ -94,6 +94,15 @@ h3 {
   text-align: center;
   background-color: white;
 }
+/* Dans fournisseur-detail.component.css */
+.table td div {
+  display: block;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+.table td div:last-child {
+  margin-bottom: 0;
+}
 
 .table tr:hover td {
   background-color: #fafafa;

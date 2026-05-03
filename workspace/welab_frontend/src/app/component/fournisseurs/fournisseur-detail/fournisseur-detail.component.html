@@ -10,40 +10,94 @@
     </div>
 
     <div class="actions-bar">
-      <button class="btn-primary" (click)="openAddFournir()">➕ Ajouter une matière première</button>
-      <button class="btn-secondary" routerLink="/distributions/add">🏷️ Ajouter une distribution</button>
-      <!-- <button class="btn-secondary" routerLink="/contact-fournisseurs/add/{{ fournisseur.id }}">📇 Ajouter un contact</button> -->
-    </div>
+  <button class="btn-primary" (click)="openAddFournir()">
+    ➕ Ajouter une matière première
+  </button>
+  <button
+    class="btn-secondary"
+    [routerLink]="['/distributions']"
+    [queryParams]="{ fournisseurId: fournisseur.id }">
+    🏷️ Distributions liées
+  </button>
+  <!-- NEW BUTTON START -->
+  <button
+    class="btn-secondary"
+    [routerLink]="['/contact-fournisseurs/add']"
+    [queryParams]="{ fournisseurId: fournisseur.id }">
+    👤 Ajouter contact
+  </button>
+  <!-- NEW BUTTON END -->
+  <!-- <button
+    class="btn-secondary"
+    [routerLink]="['/fournisseurs', fournisseur.id, 'fichiers', 'add']">
+    📎 Ajouter un fichier
+  </button> -->
+</div>
 
     <h3>Matières premières fournies</h3>
     <table class="table">
       <thead>
-        <tr><th>Matière première</th><th>Distribution (marque)</th><th>Prix (€)</th><th>MOQ</th><th>Actions</th></tr>
+        <tr>
+          <th>Matière première</th>
+          <th>Distribution (marque)</th>
+          <th>Prix (€)</th>
+          <th>MOQ</th>
+          <th>Contact</th> 
+          <th>Actions</th>
+        </tr>
       </thead>
-      <tbody>
-        @for (f of fournitures; track f.id) {
-          <tr>
-            <td>{{ getMatPremNom(f.matPrem) }}</td>
-            <td>{{ getDistribNom(f.distribution) }}</td>
-            <td>{{ f.prix }}</td>
-            <td>{{ f.moq }}</td>
-            <td>
-              <!-- <button (click)="openEditFournir(f)" class="btn-edit">✏️</button>
-              <button (click)="deleteFournir(f.id!)" class="btn-delete">🗑️</button> -->
+     <tbody>
+  @for (f of fournitures; track f.id) {
+    <tr>
+      <td>{{ getMatPremNom(f.matPrem) }}</td>
+      <td>{{ getDistribNom(f.distribution) }}</td>
+      <td>{{ f.prix }}</td>
+      <td>{{ f.moq }}</td>
+      <td>
+  <!-- Contacts généraux du fournisseur (toujours affichés) -->
+  @if (fournisseur.emailGen) {
+    <div>📧 {{ fournisseur.emailGen }}</div>
+  }
+  @if (fournisseur.telFourni) {
+    <div>📞 {{ fournisseur.telFourni }}</div>
+  }
 
-            </td>
-          </tr>
-        } @empty {
-          <tr><td colspan="5">Aucune matière première associée</td></tr>
-        }
-      </tbody>
+  <!-- Contacts spécifiques pour la paire (MP+distribution) -->
+  @let contacts = getContactsForFournir(f.id!);
+  @if (contacts.specifiques.length) {
+    @for (c of contacts.specifiques; track c.id) {
+      <div>
+        @if (c.email) { 📧 {{ c.email }} } 
+        @if (c.telContact) { 📞 {{ c.telContact }} }
+        ({{ c.nom }} {{ c.prenom }} - {{ c.fonction }})
+      </div>
+    }
+  }
+
+  @if (!fournisseur.emailGen && !fournisseur.telFourni && contacts.specifiques.length === 0) {
+    Aucun contact
+  }
+</td>   <!-- ← décommenté -->
+      <!-- inside the table, in the <td> of Actions, after existing buttons -->
+    <td>
+      <button (click)="openEditFournir(f)" class="btn-update">✏️ Modifier</button>
+      <button (click)="openDeleteFournir(f.id!)" class="btn-delete">🗑️ Supprimer</button>
+      <button (click)="openManageContacts(f)" class="btn-secondary" style="background-color: #6c757d; margin-left: 5px;">
+        📋 Gérer contacts
+      </button>
+    </td>
+    </tr>
+  } @empty {
+    <tr><td colspan="6">Aucune matière première associée</td></tr>
+  }
+</tbody>
     </table>
   }
 
-  <!-- Modal ajout/modification Fournir (simplifié) -->
-  <!-- @if (showModalFournir) {
+  <!-- Modal : ajouter une fourniture -->
+  @if (showModalFournir && fournisseur) {
     <app-modal-fournir
-      [fournisseurId]="fournisseur.id" 
+      [fournisseurId]="fournisseur.id!"
       [matieres]="matieres"
       [distributions]="distributions"
       (saved)="onFournirSaved()"
@@ -51,11 +105,38 @@
     </app-modal-fournir>
   }
 
+  <!-- Modal : modifier prix / MOQ -->
   @if (showModalEditFournir && selectedFournir) {
-    <app-modal-edit-fournir
-      [fournir]="selectedFournir"
-      (saved)="onFournirSaved()"
-      (closed)="showModalEditFournir = false">
-    </app-modal-edit-fournir>
-  } -->
+   <app-modal-edit-fournir
+  [fournir]="selectedFournir"
+  [distributions]="distributionsFournisseur"   
+  [matiereNom]="selectedMpNameForEdit"
+  (saved)="onFournirSaved()"
+  (closed)="showModalEditFournir = false">
+</app-modal-edit-fournir>
+  }
+
+  <!-- Modal : confirmer suppression -->
+  @if (showDeleteModal) {
+    <div class="modal-backdrop">
+      <div class="modal-box">
+        <h3>Confirmer la suppression</h3>
+        <p>Voulez-vous vraiment supprimer cette relation matière première / fournisseur ?</p>
+        <div class="modal-actions">
+          <button class="btn-cancel" (click)="closeDeleteModal()">Annuler</button>
+          <button class="btn-delete" (click)="confirmDelete()">Supprimer</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (showManageContactsModal && fournisseur && manageContactsDistId && manageContactsMpId) {
+  <app-manage-contacts
+    [distributionId]="manageContactsDistId"
+    [mpId]="manageContactsMpId"
+    [fournisseurId]="fournisseur.id!"
+    (refresh)="onManageContactsRefresh()"
+    (closed)="showManageContactsModal = false">
+  </app-manage-contacts>
+}
 </div>

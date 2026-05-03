@@ -1,0 +1,77 @@
+<div class="demande-container">
+  <h2>Demande d'échantillon</h2>
+
+  @if (successMessage) {
+    <div class="alert success">{{ successMessage }}</div>
+  }
+  @if (errorMessage) {
+    <div class="alert error">{{ errorMessage }}</div>
+  }
+
+  <form (ngSubmit)="createDemande()" #demandeForm="ngForm">
+    <!-- MP -->
+    <div class="form-group">
+      <label>Matière première</label>
+      @if (vientDAlerte) {
+        <p class="form-control-static">{{ getMpNom(demande.mp) }}</p>
+        <input type="hidden" name="mp" [(ngModel)]="demande.mp" />
+      } @else {
+        <select id="mp" class="form-control" name="mp" [(ngModel)]="demande.mp"
+                (change)="loadFournisseursByMp(demande.mp)" required>
+          <option value="">-- Choisir une matière première --</option>
+          @for (mp of matieresPremieres; track mp.id) {
+            <option [value]="getMpIri(mp)">{{ mp.nomMP }}</option>
+          }
+        </select>
+      }
+    </div>
+
+    <!-- Fournisseur -->
+    <div class="form-group">
+      <label for="fournisseur">Fournisseur</label>
+      @if (isLoadingFournisseurs) {
+        <p class="loading">Chargement des fournisseurs...</p>
+      } @else {
+        <select id="fournisseur" class="form-control" name="fournisseur"
+                [(ngModel)]="demande.fournisseur" required>
+          <option value="">-- Choisir un fournisseur --</option>
+          @for (f of fournisseurs; track f.id) {
+            <option [value]="getFournisseurIri(f)">{{ f.nomEntr }}</option>
+          }
+        </select>
+      }
+    </div>
+
+    <!-- Date demande -->
+    <div class="form-group">
+      <label for="dateDemande">Date demande</label>
+      <input id="dateDemande" class="form-control" type="date" name="dateDemande"
+             [(ngModel)]="demande.dateDemande" />
+    </div>
+
+    <!-- Délai livraison -->
+    <div class="form-group">
+      <label for="delaiLivraison">Délai livraison</label>
+      <input id="delaiLivraison" class="form-control" type="date" name="delaiLivraison"
+             [(ngModel)]="demande.delaiLivraison" />
+    </div>
+
+    <!-- État -->
+    <div class="form-group">
+      <label for="etat">État</label>
+      <select id="etat" class="form-control" name="etat" [(ngModel)]="demande.etat">
+        <option value="EN_COURS">EN_COURS</option>
+        <option value="ENVOYE">ENVOYE</option>
+        <option value="RECU">RECU</option>
+        <option value="REFUSE">REFUSE</option>
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-submit" [disabled]="isLoading">
+        {{ isLoading ? 'Création...' : 'Commander échantillon' }}
+      </button>
+      <button type="button" class="btn-cancel" (click)="cancel()">Annuler</button>
+    </div>
+  </form>
+</div>
