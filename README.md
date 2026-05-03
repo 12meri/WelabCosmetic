@@ -83,13 +83,13 @@ WelabCosmetic/
   ```bash
   docker exec -ti LaboWelab bash
   [ USERNAME | /var/www/html ] cd weLab_backend/
-  [ USERNAME | /var/www/html/weLab_backend ] symfony server:start
+  [ USERNAME | /var/www/html/weLab_backend ] symfony server:start --port=8000 --listen-ip=0.0.0.0 --no-tls&
   ```
   Pour lancer le serveur Angular :
   ```bash
    docker exec -ti LaboWelab bash
   [ USERNAME | /var/www/html ] cd welab_frontend/
-  [ USERNAME | /var/www/html/welab_frontend ]  ng serve
+  [ USERNAME | /var/www/html/welab_frontend ]  ng serve --host 0.0.0.0 --port 4200
 
 3. Accéder à l'API : http://localhost:8011/api/docs
 4. Accéder au frontend : http://localhost:8021 --> le site web
